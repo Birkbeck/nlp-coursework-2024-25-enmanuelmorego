@@ -2,3 +2,12 @@
 # nlp-cw-template25
 template for NLP module coursework
 Enmanuel Moreno Gomez
+
+“I have read and understood the sections of plagiarism in the College Policy
+on assessment offences and confirm that the work is my own, with the work
+of others clearly acknowledged. I give my permission to submit my report
+to the plagiarism testing database that the College is using and test it using
+plagiarism detection software, search engines or meta-searching software.”
+This refers to the document at:
+https://www.bbk.ac.uk/student-services/exams/plagiarism-guidelines
+A submission without the declaration will get 0 marks.
