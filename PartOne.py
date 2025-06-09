@@ -8,6 +8,7 @@ from pathlib import Path
 import pandas as pd
 import os
 import glob
+import re
 
 nlp = spacy.load("en_core_web_sm")
 nlp.max_length = 2000000
@@ -65,7 +66,7 @@ def read_novels(path=Path.cwd() / "texts" / "novels"):
         with open(file_load, 'r', encoding='utf-8') as file:
             content = file.read()
             # Remove special break characters
-            content = content.strip()
+            content = re.sub(r"\s+", " ", content).strip()
 
         # Add them to our data object
         data_dict.append({'text': content, 'title': title, 'author':author, 'year': year[:-4]})
