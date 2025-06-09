@@ -9,6 +9,7 @@ import pandas as pd
 import os
 import glob
 import re
+import nltk
 
 nlp = spacy.load("en_core_web_sm")
 nlp.max_length = 2000000
@@ -56,11 +57,13 @@ def read_novels(path=Path.cwd() / "texts" / "novels"):
     """
     # Extract filenames
     files = os.listdir(path)
+    # Initialise list of dictionaries
     data_dict = []
+
     for f in files:
         # Extract values for column headers
         title, author, year = f.split("-")
-
+        # Join file name with directory path
         file_load = os.path.join(path, f)
 
         # Load data/text from documents
@@ -71,6 +74,7 @@ def read_novels(path=Path.cwd() / "texts" / "novels"):
 
         # Add them to our data object
         data_dict.append({'text': content, 'title': title, 'author':author, 'year': year[:-4]})
+        # Transform dictionary into a pandas data frame
         df = pd.DataFrame(data_dict)
 
     # Return sorted data frame with clean indeces
@@ -86,7 +90,13 @@ def parse(df, store_path=Path.cwd() / "pickles", out_name="parsed.pickle"):
 
 def nltk_ttr(text):
     """Calculates the type-token ratio of a text. Text is tokenized using nltk.word_tokenize."""
-    pass
+    # Initiliase list of tokens
+    tokens = []
+
+    # Tokenize document
+    tokens.extend(nltk.word_tokenize(text))
+    
+    return tokens
 
 
 def get_ttrs(df):
