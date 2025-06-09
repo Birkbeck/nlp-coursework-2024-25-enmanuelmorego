@@ -5,7 +5,8 @@
 import nltk
 import spacy
 from pathlib import Path
-
+import pandas as pd
+import os
 
 nlp = spacy.load("en_core_web_sm")
 nlp.max_length = 2000000
@@ -50,7 +51,17 @@ def read_novels(path=Path.cwd() / "texts" / "novels"):
     Returns: 
         A DataFrame with the text, title, author, and year
     """
-    return path
+    # Extract filenames
+    files = os.listdir(path)
+    data_dict = {}
+    for f in files:
+        # Extract values for column headers
+        title, author, year, file_ext = f.split("-")
+
+        # Add them to our data object
+        data_dict.append({'title': title, 'author':author, 'year': year})
+
+    return data_dict 
    
 
 
