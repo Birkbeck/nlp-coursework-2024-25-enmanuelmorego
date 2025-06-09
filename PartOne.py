@@ -52,6 +52,7 @@ def read_novels(path=Path.cwd() / "texts" / "novels"):
 
     Returns: 
         A DataFrame with the text, title, author, and year
+        The DataFrame is sorted by year with new indeces matching the sorting pattern
     """
     # Extract filenames
     files = os.listdir(path)
@@ -72,6 +73,7 @@ def read_novels(path=Path.cwd() / "texts" / "novels"):
         data_dict.append({'text': content, 'title': title, 'author':author, 'year': year[:-4]})
         df = pd.DataFrame(data_dict)
 
+    # Return sorted data frame with clean indeces
     return df.sort_values("year").reset_index(drop=True)
    
 
