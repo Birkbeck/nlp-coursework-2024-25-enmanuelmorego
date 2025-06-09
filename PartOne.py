@@ -96,13 +96,7 @@ def nltk_ttr(text):
     tokens = nltk.word_tokenize(text)
     # Remove punctuation marks (only keep alpha characters)
     tokens = [word for word in tokens if word.isalpha()]
-    print(tokens)
     # Calculate type-token ratio
-    total_unique_tokens = len(set(tokens))
-    print(f"Total Unique Tokens: {total_unique_tokens}")
-    total_tokens = len(tokens)
-    print(f"Total Tokens: {total_tokens}")
-
     ttr = round(len(set(tokens))/len(tokens),4)
     
     return ttr
