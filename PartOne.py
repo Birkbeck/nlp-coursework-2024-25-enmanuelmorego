@@ -7,6 +7,7 @@ import spacy
 from pathlib import Path
 import pandas as pd
 import os
+import glob
 
 nlp = spacy.load("en_core_web_sm")
 nlp.max_length = 2000000
@@ -58,10 +59,17 @@ def read_novels(path=Path.cwd() / "texts" / "novels"):
         # Extract values for column headers
         title, author, year = f.split("-")
 
-        # Add them to our data object
-        data_dict.append({'title': title, 'author':author, 'year': year[:-4]})
+        file_load = os.path.join(path, f)
 
-    return data_dict 
+        # Load data/text from documents
+        with open(file_load, 'r', encoding='utf-8') as file:
+            content = file.read()
+
+        # Add them to our data object
+        data_dict.append({'text': content, 'title': title, 'author':author, 'year': year[:-4]})
+        df = pd.DataFrame(data_dict)
+
+    return df 
    
 
 
