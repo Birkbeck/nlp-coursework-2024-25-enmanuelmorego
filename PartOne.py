@@ -64,12 +64,14 @@ def read_novels(path=Path.cwd() / "texts" / "novels"):
         # Load data/text from documents
         with open(file_load, 'r', encoding='utf-8') as file:
             content = file.read()
+            # Remove special break characters
+            content = content.strip()
 
         # Add them to our data object
         data_dict.append({'text': content, 'title': title, 'author':author, 'year': year[:-4]})
         df = pd.DataFrame(data_dict)
 
-    return df 
+    return df.sort_values("year").reset_index(drop=True)
    
 
 
