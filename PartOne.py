@@ -53,13 +53,13 @@ def read_novels(path=Path.cwd() / "texts" / "novels"):
     """
     # Extract filenames
     files = os.listdir(path)
-    data_dict = {}
+    data_dict = []
     for f in files:
         # Extract values for column headers
-        title, author, year, file_ext = f.split("-")
+        title, author, year = f.split("-")
 
         # Add them to our data object
-        data_dict.append({'title': title, 'author':author, 'year': year})
+        data_dict.append({'title': title, 'author':author, 'year': year[:-4]})
 
     return data_dict 
    
