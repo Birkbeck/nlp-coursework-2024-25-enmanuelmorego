@@ -50,7 +50,7 @@ def read_novels(path=Path.cwd() / "texts" / "novels"):
     Returns: 
         A DataFrame with the text, title, author, and year
     """
-    print(path)
+    return path
    
 
 

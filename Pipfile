@@ -5,10 +5,10 @@ name = "pypi"
 
 [packages]
 requests = "*"
-nltk = "*"
 numpy = "*"
-spacy = "*"
 pandas = "*"
+nltk = "*"
+spacy = "*"
 
 [dev-packages]
 
