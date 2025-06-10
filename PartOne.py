@@ -90,12 +90,7 @@ def parse(df, store_path=Path.cwd() / "pickles", out_name="parsed.pickle"):
 
 def nltk_ttr(text):
     """Calculates the type-token ratio of a text. Text is tokenized using nltk.word_tokenize."""
-    # Transform text to lower case
-    text = text.lower()
-    # Tokenize document
-    tokens = nltk.word_tokenize(text)
-    # Remove punctuation marks (only keep alpha characters)
-    tokens = [word for word in tokens if word.isalpha()]
+    tokens = tokens_clean(text)
     # Calculate type-token ratio
     ttr = round(len(set(tokens))/len(tokens),4)
     
@@ -148,6 +143,13 @@ def tokens_clean(text):
         Returns:
             list: a list of cleaned tokens
     '''
+    # Transform text to lower case
+    text = text.lower()
+    # Tokenize document
+    tokens = nltk.word_tokenize(text)
+    # Remove punctuation marks (only keep alpha characters)
+    tokens = [word for word in tokens if word.isalpha()]
+    return tokens
 
 if __name__ == "__main__":
     """
