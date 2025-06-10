@@ -136,6 +136,18 @@ def adjective_counts(doc):
     pass
 
 
+def tokens_clean(text):
+    '''
+    Function that takes a given text and cleans it by:
+        - Making all text lower case
+        - Removing punctuation and numbers
+    
+        Args:
+            text: a string object
+        
+        Returns:
+            list: a list of cleaned tokens
+    '''
 
 if __name__ == "__main__":
     """
