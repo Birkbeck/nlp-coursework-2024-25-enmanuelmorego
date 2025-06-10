@@ -190,6 +190,25 @@ def count_syl_vowel_cluster(word):
     Returns:
         int: total number of syllables per word
     '''
+    # Define vowels
+    v = ['a','e','i','o','u']
+    cons_vowel = 0
+    syl_count = 0
+
+    # Loop over word
+    for l in word:
+        if l in v:
+            cons_vowel += 1
+        # If letter is not a vowel
+        else:
+            # If there are previous vowels:
+            if cons_vowel > 0:
+                # Add a syllable count
+                syl_count += 1
+                # Reset consecutive counter
+                cons_vowel = 0
+            # If not greater than 0, go to next iteration
+    return syl_count
 
 
 
