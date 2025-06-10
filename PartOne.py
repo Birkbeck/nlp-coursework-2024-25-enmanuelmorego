@@ -49,7 +49,7 @@ def count_syl(word, d):
     # Find the word in the dictionary
     w = d.get(word, False)
     if w:
-        for syl_list in w:
+        for syl_list in w[0]:
             for syl in syl_list:
                 if not syl.isalpha():
                     syl_count += 1

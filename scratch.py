@@ -13,10 +13,13 @@ text = "This is the test string. ThIS contains NUMBERS like 123,123,4321. Also p
 nltk.download("cmudict")
 
 cmu_dict = cmudict.dict()
+po.count_syl('education', cmu_dict)
 
 # Extract the list of the corresponding word
-w = 'unbelievable'
+# test_words = {"cat": 1,"apple": 2,"banana": 3,"computer": 3,"education": 4,"unbelievable": 5,"unintelligible": 6}
 
-syl = po.count_syl(w, cmu_dict)
-    
-print(f"Word: {w}, Syllables: {syl}")
+# for key, value in test_words.items():
+#     print(f"Key {key}: Value: {value}")
+#     print(f"Syl count: {po.count_syl(key, cmu_dict)}")
+#     print("."*20)
+ 

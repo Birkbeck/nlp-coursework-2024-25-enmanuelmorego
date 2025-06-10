@@ -2,6 +2,8 @@
 Script to test that the functions works as expected
 '''
 import PartOne as po
+import nltk
+from nltk.corpus import cmudict
 
 def test_token_clean1():
     '''
@@ -26,3 +28,11 @@ def test_count_syl1():
     '''
     Test to ensure syllable counter works as expected
     '''
+    # Download CMU Dictionary
+    nltk.download("cmudict")
+    cmu_dict = cmudict.dict()
+
+    test_words = {"cat": 1,"apple": 2,"banana": 3,"computer": 3,"education": 4,"unbelievable": 5,"unintelligible": 6}
+
+    for key, value in test_words.items():
+        assert po.count_syl(key, cmu_dict) == value
