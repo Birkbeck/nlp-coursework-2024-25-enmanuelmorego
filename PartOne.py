@@ -60,9 +60,8 @@ def count_syl(word, d):
             if syl[-1].isdigit():
                 syl_count += 1
     # TODO clarify vowel cluster assignment
-    #else:
-     
-
+    else:
+       syl_count += count_syl_vowel_cluster(word)
 
     return syl_count
 
@@ -196,19 +195,23 @@ def count_syl_vowel_cluster(word):
     syl_count = 0
     word = word.lower()
 
-    # # Loop over word
-    # for l in word:
-    #     if l in v:
-    #         cons_vowel += 1
-    #     # If letter is not a vowel
-    #     else:
-    #         # If there are previous vowels:
-    #         if cons_vowel > 0:
-    #             # Add a syllable count
-    #             syl_count += 1
-    #             # Reset consecutive counter
-    #             cons_vowel = 0
-    #         # If not greater than 0, go to next iteration
+    # Loop over word
+    for l in word:
+        if l in v:
+            cons_vowel += 1
+        # If letter is not a vowel
+        else:
+            # If there are previous vowels:
+            if cons_vowel > 0:
+                # Add a syllable count
+                syl_count += 1
+                # Reset consecutive counter
+                cons_vowel = 0
+            # If not greater than 0, go to next iteration
+    # Capture cases where the last iteration is a sequence of vowels
+    if cons_vowel > 0:
+        syl_count += 1
+
     return syl_count
 
 

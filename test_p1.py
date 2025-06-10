@@ -44,3 +44,4 @@ def test_count_syl_vowel_cluster1():
     assert po.count_syl_vowel_cluster('beautiful') == 3
     assert po.count_syl_vowel_cluster('zoo') == 1
     assert po.count_syl_vowel_cluster('audio') == 2
+    assert po.count_syl_vowel_cluster('temperature') == 5
