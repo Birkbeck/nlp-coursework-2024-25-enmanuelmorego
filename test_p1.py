@@ -21,3 +21,8 @@ def test_nltk_ttr1():
     test_text = "This is the test string. ThIS contains NUMBERS like 123,123,4321. Also puncutation like €#,! Is numbERS"
     # Text above contains 14 tokens and  10 unique tokens (removing number and puncptuation and ignoring case. Expect TTR = 0.7143)
     assert po.nltk_ttr(test_text) == 0.7143
+
+def test_count_syl1():
+    '''
+    Test to ensure syllable counter works as expected
+    '''

@@ -14,6 +14,9 @@ import nltk
 nlp = spacy.load("en_core_web_sm")
 nlp.max_length = 2000000
 
+# Download CMU Dictionary
+nltk.download("cmudict")
+
 
 
 def fk_level(text, d):
@@ -41,7 +44,17 @@ def count_syl(word, d):
     Returns:
         int: The number of syllables in the word.
     """
-    pass
+    # Initialise syllable counter
+    syl_count = 0
+    # Find the word in the dictionary
+    w = d.get(word, False)
+    if w:
+        for syl_list in w:
+            for syl in syl_list:
+                if not syl.isalpha():
+                    syl_count += 1
+
+    return syl_count
 
 
 def read_novels(path=Path.cwd() / "texts" / "novels"):
@@ -90,7 +103,13 @@ def parse(df, store_path=Path.cwd() / "pickles", out_name="parsed.pickle"):
 
 def nltk_ttr(text):
     """Calculates the type-token ratio of a text. Text is tokenized using nltk.word_tokenize."""
-    tokens = tokens_clean(text)
+    # Replace words separated by "-" with " " and transform text to lower case
+    text = text.lower().replace("-"," ")
+    # Tokenize document
+    tokens = nltk.word_tokenize(text)
+    # Remove punctuation marks (only keep alpha characters)
+    tokens = [word for word in tokens if word.isalpha()]
+    #tokens = tokens_clean(text) See first # TODO
     # Calculate type-token ratio
     ttr = round(len(set(tokens))/len(tokens),4)
     
@@ -132,6 +151,7 @@ def adjective_counts(doc):
 
 
 def tokens_clean(text):
+    # TODO maybe this is not needed
     '''
     Function that takes a given text and cleans it by:
         - Making all text lower case
