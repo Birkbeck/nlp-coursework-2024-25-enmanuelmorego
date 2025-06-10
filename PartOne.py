@@ -30,7 +30,19 @@ def fk_level(text, d):
     Returns:
         float: The Flesch-Kincaid Grade Level of the text. (higher grade is more difficult)
     """
-    pass
+    # Count total words
+    words = tokens_clean(text)
+    total_words = len(words)
+    # Count total sentences
+    sentences
+    
+    # Count total syllables
+    total_syl = 0
+    for w in words:
+        total_syl += count_syl(w, d)
+
+    return total_syl
+
 
 
 def count_syl(word, d):
@@ -48,7 +60,6 @@ def count_syl(word, d):
     syl_count = 0
     # Vowels
     v = ['a','e','i','o','u']
-    v_group = False
     # Find the word in the dictionary
     w = d.get(word.lower(), False)
     if w:

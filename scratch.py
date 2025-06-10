@@ -10,9 +10,9 @@ from nltk.corpus import cmudict
 
 
 # # Download CMU Dictionary
-# nltk.download("cmudict")
+nltk.download("cmudict")
 
-# cmu_dict = cmudict.dict()
+cmu_dict = cmudict.dict()
 # print(po.count_syl('tow-fold', cmu_dict))
 
 # Extract the list of the corresponding word
@@ -40,7 +40,9 @@ syl_count = 0
 
 # print(f"my count{syl_count}")
 
+#print(po.fk_level("Wow! In 2025, Amelia's\n\n robot baked 32 delicious apple pies — can you believe it?", cmu_dict))
+t = "Wow! In 2025, Amelia's\n\n robot baked 32 delicious apple pies — can you believe it?"
+print(nltk.tokenize.sent_tokenize(t))
 
-print(po.count_syl_vowel_cluster('beautiful')) # == 3
-print(po.count_syl_vowel_cluster('zoo'))# == 1
-print(po.count_syl_vowel_cluster('audio'))# == 2
+test_text = "Does it Remove \n\n these types of \t\v special characters?"
+print(po.tokens_clean(test_text))

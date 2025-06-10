@@ -13,6 +13,10 @@ def test_token_clean1():
     expect = ['this', 'is', 'my', 'string', 'of', 'text', 'removes', 'number', 'like', 'and', 'non', 'letter', 'objects']
     assert po.tokens_clean(test_text) == expect
 
+    test_text = "Does it Remove \n\n these types of \t\v special characters?"
+    expect = ['does','it','remove','these','types','of','special','characters']
+    assert po.tokens_clean(test_text) == expect
+
 def test_nltk_ttr1():
     '''
     Test that the function recieves a text object with:
