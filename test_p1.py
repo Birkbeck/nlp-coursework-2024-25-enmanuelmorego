@@ -32,7 +32,7 @@ def test_count_syl1():
     nltk.download("cmudict")
     cmu_dict = cmudict.dict()
 
-    test_words = {"cat": 1,"apple": 2,"banana": 3,"computer": 3,"education": 4,"unbelievable": 5,"unintelligible": 6}
+    test_words = {"cat": 1,"aPPle": 2,"banana": 3,"computEr": 3,"education": 4,"unbelievable": 5,"unintelligible": 6}
 
     for key, value in test_words.items():
         assert po.count_syl(key, cmu_dict) == value

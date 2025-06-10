@@ -47,12 +47,15 @@ def count_syl(word, d):
     # Initialise syllable counter
     syl_count = 0
     # Find the word in the dictionary
-    w = d.get(word, False)
+    w = d.get(word.lower(), False)
     if w:
-        for syl_list in w[0]:
-            for syl in syl_list:
-                if not syl.isalpha():
-                    syl_count += 1
+        # Extract the first list of phoneme (if there are multiple pronunciations for words, there would be multiple list)
+        # We are only interested on counting syllables so taking the first list works
+        syl_list = w[0]
+        for syl in syl_list:
+            # Syllables are labeled on objects that end with a number (representing the stress of pronunciation)
+            if syl[-1].isdigit():
+                syl_count += 1
 
     return syl_count
 

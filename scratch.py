@@ -13,7 +13,7 @@ text = "This is the test string. ThIS contains NUMBERS like 123,123,4321. Also p
 nltk.download("cmudict")
 
 cmu_dict = cmudict.dict()
-po.count_syl('education', cmu_dict)
+print(po.count_syl('twofold', cmu_dict))
 
 # Extract the list of the corresponding word
 # test_words = {"cat": 1,"apple": 2,"banana": 3,"computer": 3,"education": 4,"unbelievable": 5,"unintelligible": 6}
