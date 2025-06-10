@@ -34,14 +34,16 @@ def fk_level(text, d):
     words = tokens_clean(text)
     total_words = len(words)
     # Count total sentences
-    sentences
-    
+    text_cleaned = re.sub(r'[\n\t\r\f\v]', ' ', text)
+    sentences = nltk.tokenize.sent_tokenize(text_cleaned)
+    total_sentences = len(sentences)
     # Count total syllables
     total_syl = 0
     for w in words:
         total_syl += count_syl(w, d)
 
-    return total_syl
+    fk_level = (0.39*(total_words/total_sentences)) + (11.8*(total_syl/total_words)) - 15.59
+    return fk_level
 
 
 
