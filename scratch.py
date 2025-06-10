@@ -8,11 +8,15 @@ text = "This is the test string. ThIS contains NUMBERS like 123,123,4321. Also p
 
 
 
-print(po.nltk_ttr(text))
+# print(po.nltk_ttr(text))
 
-for index, row in df.iterrows():
-    print(f"Row {index:<2}: {row['title']:<30} ({row['year']}) Type-Token Ratio {po.nltk_ttr(row['text']):.4f}")
-print(":"*80)
-t = po.get_ttrs(df)
-for key, value in t.items():
-    print(f"{key:<10}: {value:<25}")
+# for index, row in df.iterrows():
+#     print(f"Row {index:<2}: {row['title']:<30} ({row['year']}) Type-Token Ratio {po.nltk_ttr(row['text']):.4f}")
+# print(":"*80)
+# t = po.get_ttrs(df)
+# for key, value in t.items():
+#     print(f"{key:<10}: {value:<25}")
+
+test_text = "This is MY StrING of TEXT!! REmoves number like 1206-9 and non-letter objects"
+ #   expect = ['this', 'is', 'my', 'string', 'of', 'text', 'removes', 'number', 'like', 'and', 'non', 'letter', 'objects']
+print(po.tokens_clean(test_text))

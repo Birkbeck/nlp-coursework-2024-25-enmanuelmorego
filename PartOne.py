@@ -143,8 +143,8 @@ def tokens_clean(text):
         Returns:
             list: a list of cleaned tokens
     '''
-    # Transform text to lower case
-    text = text.lower()
+    # Replace words separated by "-" with " " and transform text to lower case
+    text = text.lower().replace("-"," ")
     # Tokenize document
     tokens = nltk.word_tokenize(text)
     # Remove punctuation marks (only keep alpha characters)

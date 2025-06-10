@@ -3,6 +3,14 @@ Script to test that the functions works as expected
 '''
 import PartOne as po
 
+def test_token_clean1():
+    '''
+    Function that cleans and tokenize a string of text using word_tokenizer
+    '''
+    test_text = "This is MY StrING of TEXT!! REmoves number like 1206-9 and non-letter objects"
+    expect = ['this', 'is', 'my', 'string', 'of', 'text', 'removes', 'number', 'like', 'and', 'non', 'letter', 'objects']
+    assert po.tokens_clean(test_text) == expect
+
 def test_nltk_ttr1():
     '''
     Test that the function recieves a text object with:
