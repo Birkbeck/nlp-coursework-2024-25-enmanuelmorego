@@ -60,7 +60,7 @@ def count_syl(word, d):
             if syl[-1].isdigit():
                 syl_count += 1
     # TODO clarify vowel cluster assignment
-    else:
+    #else:
      
 
 
@@ -194,6 +194,7 @@ def count_syl_vowel_cluster(word):
     v = ['a','e','i','o','u']
     cons_vowel = 0
     syl_count = 0
+    word = word.lower()
 
     # Loop over word
     for l in word:

@@ -36,3 +36,11 @@ def test_count_syl1():
 
     for key, value in test_words.items():
         assert po.count_syl(key, cmu_dict) == value
+
+def test_count_syl_vowel_cluster1():
+    '''
+    Test that vowel cluster count work as expected
+    '''
+    assert po.count_syl_vowel_cluster('beautiful') == 3
+    assert po.count_syl_vowel_cluster('zoo') == 1
+    assert po.count_syl_vowel_cluster('audio') == 2

@@ -28,29 +28,33 @@ v = ['a','e','i','o','u']
 vowel_cons_count = 0
 syl_count = 0
 
-for l in w:
-    if l in v:
-        vowel_cons_count += 1
-    else:
-        if vowel_cons_count > 0:
-            syl_count += 1
-            vowel_cons_count = 0
-        else:
-            vowel_cons_count = 0
+# for l in w:
+#     if l in v:
+#         vowel_cons_count += 1
+#     else:
+#         if vowel_cons_count > 0:
+#             syl_count += 1
+#             vowel_cons_count = 0
+#         else:
+#             vowel_cons_count = 0
 
-print(f"my count{syl_count}")
+# print(f"my count{syl_count}")
 
-w = 'beautiful'
-in_vowel_group = False
-syl_count = 0
-for l in w:
-            # If letter is a vowel
-            if l in v:
-                # if v_group is false, then its first consecutive vowel
-                if not v_group:
-                    syl_count += 1
-                    # Set to true, if next letter is vowel, syl_coubnt += 1 is skipped
-                    v_group = True
-            else:
-                v_group = False
-print(f"chatgpt count {syl_count}")
+# w = 'beautiful'
+# in_vowel_group = False
+# syl_count = 0
+# for l in w:
+#             # If letter is a vowel
+#             if l in v:
+#                 # if v_group is false, then its first consecutive vowel
+#                 if not v_group:
+#                     syl_count += 1
+#                     # Set to true, if next letter is vowel, syl_coubnt += 1 is skipped
+#                     v_group = True
+#             else:
+#                 v_group = False
+# print(f"chatgpt count {syl_count}")
+
+#print(po.count_syl_vowel_cluster('beautiful')) # == 3
+print(po.count_syl_vowel_cluster('zoo'))# == 1
+#print(po.count_syl_vowel_cluster('audio'))# == 2
