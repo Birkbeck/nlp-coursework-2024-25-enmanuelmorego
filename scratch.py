@@ -6,14 +6,14 @@ from nltk.corpus import cmudict
 # text2 = df.iloc[0,0]
 
 
-text = "This is the test string. ThIS contains NUMBERS like 123,123,4321. Also puncutation like €#,! Is numbERS"
+# text = "This is the test string. ThIS contains NUMBERS like 123,123,4321. Also puncutation like €#,! Is numbERS"
 
 
-# Download CMU Dictionary
-nltk.download("cmudict")
+# # Download CMU Dictionary
+# nltk.download("cmudict")
 
-cmu_dict = cmudict.dict()
-print(po.count_syl('twofold', cmu_dict))
+# cmu_dict = cmudict.dict()
+# print(po.count_syl('tow-fold', cmu_dict))
 
 # Extract the list of the corresponding word
 # test_words = {"cat": 1,"apple": 2,"banana": 3,"computer": 3,"education": 4,"unbelievable": 5,"unintelligible": 6}
@@ -22,4 +22,35 @@ print(po.count_syl('twofold', cmu_dict))
 #     print(f"Key {key}: Value: {value}")
 #     print(f"Syl count: {po.count_syl(key, cmu_dict)}")
 #     print("."*20)
- 
+
+w = 'beautiful'
+v = ['a','e','i','o','u']
+vowel_cons_count = 0
+syl_count = 0
+
+for l in w:
+    if l in v:
+        vowel_cons_count += 1
+    else:
+        if vowel_cons_count > 0:
+            syl_count += 1
+            vowel_cons_count = 0
+        else:
+            vowel_cons_count = 0
+
+print(f"my count{syl_count}")
+
+w = 'beautiful'
+in_vowel_group = False
+syl_count = 0
+for l in w:
+            # If letter is a vowel
+            if l in v:
+                # if v_group is false, then its first consecutive vowel
+                if not v_group:
+                    syl_count += 1
+                    # Set to true, if next letter is vowel, syl_coubnt += 1 is skipped
+                    v_group = True
+            else:
+                v_group = False
+print(f"chatgpt count {syl_count}")

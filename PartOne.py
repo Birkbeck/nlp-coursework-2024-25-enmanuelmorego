@@ -46,19 +46,25 @@ def count_syl(word, d):
     """
     # Initialise syllable counter
     syl_count = 0
+    # Vowels
+    v = ['a','e','i','o','u']
+    v_group = False
     # Find the word in the dictionary
     w = d.get(word.lower(), False)
     if w:
         # Extract the first list of phoneme (if there are multiple pronunciations for words, there would be multiple list)
-        # We are only interested on counting syllables so taking the first list works
+        # We are only interested on counting syllables so taking the first list works as CMU has the most common pronunciation as item 0
         syl_list = w[0]
         for syl in syl_list:
             # Syllables are labeled on objects that end with a number (representing the stress of pronunciation)
             if syl[-1].isdigit():
                 syl_count += 1
+    # TODO clarify vowel cluster assignment
+    else:
+     
+
 
     return syl_count
-
 
 def read_novels(path=Path.cwd() / "texts" / "novels"):
     """Reads texts from a directory of .txt files and returns a DataFrame with the text, title,
@@ -173,6 +179,19 @@ def tokens_clean(text):
     # Remove punctuation marks (only keep alpha characters)
     tokens = [word for word in tokens if word.isalpha()]
     return tokens
+
+def count_syl_vowel_cluster(word):
+    '''
+    Function to count syllables based on vowels clusters
+
+    Args:
+        word: a string representing a single word
+    
+    Returns:
+        int: total number of syllables per word
+    '''
+
+
 
 if __name__ == "__main__":
     """
