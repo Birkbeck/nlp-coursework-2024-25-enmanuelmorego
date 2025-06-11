@@ -127,7 +127,18 @@ def read_novels(path=Path.cwd() / "texts" / "novels"):
 def parse(df, store_path=Path.cwd() / "pickles", out_name="parsed.pickle"):
     """Parses the text of a DataFrame using spaCy, stores the parsed docs as a column and writes 
     the resulting  DataFrame to a pickle file"""
-    pass
+    # Initialise empty list for parsed objects
+    parsed_list = []
+    # Loop over data frame to parse texts
+    for i, r, in df.iterrows():
+        # Parse and tokenize
+        parsed_obj = nlp(r['text'])
+        # Store parsed object to list
+        parsed_list.append(parsed_obj)
+    # Add parsed_list to dataframe
+    df['parsed'] = parsed_list
+
+    return df
 
 
 def nltk_ttr(text):
