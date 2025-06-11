@@ -129,12 +129,15 @@ def parse(df, store_path=Path.cwd() / "pickles", out_name="parsed.pickle"):
     the resulting  DataFrame to a pickle file"""
     # Initialise empty list for parsed objects
     parsed_list = []
+    timer = len(df)
     # Loop over data frame to parse texts
     for i, r, in df.iterrows():
         # Parse and tokenize
         parsed_obj = nlp(r['text'])
         # Store parsed object to list
         parsed_list.append(parsed_obj)
+        print("*"*timer)
+        timer -= 1
     # Add parsed_list to dataframe
     df['parsed'] = parsed_list
 
