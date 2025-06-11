@@ -129,13 +129,21 @@ def parse(df, store_path=Path.cwd() / "pickles", out_name="parsed.pickle"):
     the resulting  DataFrame to a pickle file"""
     # Initialise empty list for parsed objects
     parsed_list = []
+    # Get max lenght of nlp
+    nlp_max = nlp.max_length
     timer = len(df)
     # Loop over data frame to parse texts
     for i, r, in df.iterrows():
-        # Parse and tokenize
-        parsed_obj = nlp(r['text'])
-        # Store parsed object to list
-        parsed_list.append(parsed_obj)
+        # Warn user if text lenght is greater than nlp max
+        if len(r['text']) > nlp_max:
+            print(f"\n**** WARNING ****\nLenght of document {r['title']} ({len(r['text'])}) is greater than SpaCy models' max ({nlp_max})\n- Please review...\n")
+            # Append None in place
+            parsed_list.append(None)
+        else:
+            # Parse and tokenize
+            parsed_obj = nlp(r['text'])
+            # Store parsed object to list
+            parsed_list.append(parsed_obj)
         print("*"*timer)
         timer -= 1
     # Add parsed_list to dataframe

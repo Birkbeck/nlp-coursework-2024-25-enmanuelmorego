@@ -2,6 +2,8 @@ import PartOne as po
 import contractions as c
 
 df = po.read_novels()
-p_df = po.parse(df)
+df_sub = (df.iloc[0:5])
+p_df = po.parse(df_sub)
+
 
 print(p_df.head())
