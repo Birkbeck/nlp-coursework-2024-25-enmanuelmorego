@@ -79,10 +79,8 @@ def count_syl(word, d):
             # Syllables are labeled on objects that end with a number (representing the stress of pronunciation)
             if syl[-1].isdigit():
                 syl_count += 1
-        print(f"word: {word}, syllables: {syl_count}")
     # TODO clarify vowel cluster assignment
     else:
-       print(f"******** Counted by vowel clusters! {word} ******** ")
        syl_count += count_syl_vowel_cluster(word)
 
     return syl_count
