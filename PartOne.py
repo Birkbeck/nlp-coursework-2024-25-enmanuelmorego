@@ -43,10 +43,10 @@ def fk_level(text, d):
         total_syl += count_syl(w, d)
 
     fk_level = (0.39*(total_words/total_sentences)) + (11.8*(total_syl/total_words)) - 15.59
-    print(f"Words: {total_words}")
-    print(f"Sentences: {total_sentences}")
-    print(f"Syllables: {total_syl}")
-    print(f"FK Grade Level: {fk_level}")
+    # print(f"Words: {total_words}")
+    # print(f"Sentences: {total_sentences}")
+    # print(f"Syllables: {total_syl}")
+    # print(f"FK Grade Level: {fk_level}")
     
     return fk_level
     # return {"Words": total_words,
