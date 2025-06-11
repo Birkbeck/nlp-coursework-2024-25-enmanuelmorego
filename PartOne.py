@@ -11,6 +11,7 @@ import string
 import re
 import nltk
 import contractions as c
+import pickle
 
 nlp = spacy.load("en_core_web_sm")
 nlp.max_length = 2000000
@@ -148,6 +149,11 @@ def parse(df, store_path=Path.cwd() / "pickles", out_name="parsed.pickle"):
         timer -= 1
     # Add parsed_list to dataframe
     df['parsed'] = parsed_list
+
+    # Save document
+    out_path = store_path/out_name
+    with open(out_path, "wb") as file:
+        pickle.dump(df, file)
 
     return df
 
