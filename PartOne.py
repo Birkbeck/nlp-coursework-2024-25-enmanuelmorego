@@ -10,6 +10,7 @@ import os
 import glob
 import re
 import nltk
+import contractions as c
 
 nlp = spacy.load("en_core_web_sm")
 nlp.max_length = 2000000
@@ -191,8 +192,12 @@ def tokens_clean(text):
         Returns:
             list: a list of cleaned tokens
     '''
+    # Clean contractions
+    text = c.fix(text)
     # Replace words separated by "-" with " " and transform text to lower case
     text = text.lower().replace("-"," ")
+    # Replace apostrophes that were not capture but the c.fix function
+    text = text.replace("'","")
     # Tokenize document
     tokens = nltk.word_tokenize(text)
     # Remove punctuation marks (only keep alpha characters)
