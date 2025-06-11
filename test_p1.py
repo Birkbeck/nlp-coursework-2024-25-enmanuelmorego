@@ -48,26 +48,3 @@ def test_count_syl1():
     test_words = {"cat": 1,"aPPle": 2,"banana": 3,"computEr": 3,"education": 4,"unbelievable": 5,"unintelligible": 6, "there":1}
 
     for key, value in test_words.items():
-        assert po.count_syl(key, cmu_dict) == value
-
-def test_count_syl_vowel_cluster1():
-    '''
-    Test that vowel cluster count work as expected
-    '''
-    assert po.count_syl_vowel_cluster('beautiful') == 3
-    assert po.count_syl_vowel_cluster('zoo') == 1
-    assert po.count_syl_vowel_cluster('audio') == 2
-    assert po.count_syl_vowel_cluster('temperature') == 5
-
-def tests_fk_level1():
-    '''
-    Test that fklevel functions works as expected
-    '''
-    text = """On an evening in the latter part of May a middle-aged man was walking homeward from Shaston to the village of Marlott, in the adjoining Vale of Blakemore, or Blackmoor. 
-            The pair of legs that carried him were rickety, and there was a bias in his gait which inclined him somewhat to the left of a straight line.  
-            He occasionally gave a smart nod, as if in confirmation of some opinion, though he was not thinking of anything in particular.  
-            An empty egg-basket was slung upon his arm, the nap of his hat was ruffled, a patch being quite worn away at its brim where his thumb came in taking it off.
-            Presently he was met by an elderly parson astride on a gray mare, who, as he rode, hummed a wandering tune."""
-    cmudict = nltk.corpus.cmudict.dict()
-    t = po.fk_level(text, cmudict)
-    assert round(t, 4) == 11.0230

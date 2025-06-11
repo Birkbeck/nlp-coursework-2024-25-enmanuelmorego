@@ -1,5 +1,5 @@
 import PartOne as po
-import nltk
+import contractions as c
 
 
 df = po.read_novels()
@@ -19,4 +19,5 @@ for key, value in t.items():
 # String of contractions
 test_text = "it's don't won't aren't we're we've i'd let's"
 expect = ['is', 'is', 'do', 'not', 'will', 'not', 'are', 'not', 'we', 'are', 'we', 'have', 'I', 'would', 'let', 'us']
-print( po.tokens_clean(test_text))
+#print( po.tokens_clean(test_text))
+print(c.fix(test_text))

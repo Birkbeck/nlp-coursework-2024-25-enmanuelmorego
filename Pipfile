@@ -10,6 +10,7 @@ pandas = "*"
 nltk = "*"
 spacy = "*"
 pytest = "*"
+contractions = "==0.1.73"
 
 [dev-packages]
 pytest = "*"
