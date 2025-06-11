@@ -10,7 +10,7 @@ def test_token_clean1():
     Function that cleans and tokenize a string of text using word_tokenizer
     '''
     test_text = "This is MY StrING of TEXT!! REmoves number like 1206-9 and non-letter objects"
-    expect = ['this', 'is', 'my', 'string', 'of', 'text', 'removes', 'number', 'like', 'and', 'non', 'letter', 'objects']
+    expect = ['this', 'is', 'my', 'string', 'of', 'text', 'removes', 'number', 'like', 'and', 'nonletter', 'objects']
     assert po.tokens_clean(test_text) == expect
 
     test_text = "Does it Remove \n\n these types of \t\v special characters?"
@@ -76,4 +76,4 @@ def tests_fk_level1():
             Presently he was met by an elderly parson astride on a gray mare, who, as he rode, hummed a wandering tune."""
     cmudict = nltk.corpus.cmudict.dict()
     t = po.fk_level(text, cmudict)
-    assert round(t, 4) == 11.0230
+    assert round(t, 4) == 11.1088

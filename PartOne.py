@@ -7,7 +7,7 @@ import spacy
 from pathlib import Path
 import pandas as pd
 import os
-import glob
+import string
 import re
 import nltk
 import contractions as c
@@ -194,14 +194,17 @@ def tokens_clean(text):
     '''
     # Clean contractions
     text = c.fix(text)
-    # Replace words separated by "-" with " " and transform text to lower case
-    text = text.lower().replace("-"," ")
-    # Replace apostrophes that were not capture but the c.fix function
-    text = text.replace("'","")
-    # Tokenize document
-    tokens = nltk.word_tokenize(text)
-    # Remove punctuation marks (only keep alpha characters)
-    tokens = [word for word in tokens if word.isalpha()]
+    # Split tokens into a list
+    tokens = text.split()
+    # Make all tokens lower case
+    tokens = [t.lower() for t in tokens]
+    # Identify all punctionation marks
+    re_punc = re.compile('[%s]' % re.escape(string.punctuation))
+    # Remove punctuation
+    tokens = [re_punc.sub('', token) for token in tokens]
+    # Only keep alphabetic characters
+    tokens = [token for token in tokens if token.isalpha()]
+
     return tokens
 
 def count_syl_vowel_cluster(word):
