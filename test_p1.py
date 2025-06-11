@@ -17,6 +17,15 @@ def test_token_clean1():
     expect = ['does','it','remove','these','types','of','special','characters']
     assert po.tokens_clean(test_text) == expect
 
+def test_token_clean2():
+    '''
+    Test that function handles contractions as expected
+    '''
+    # String of contractions
+    test_text = "it's don't won't aren't we're we've i'd let's"
+    expect = ['is', 'is', 'do', 'not', 'will', 'not', 'are', 'not', 'we', 'are', 'we', 'have', 'I', 'would', 'let', 'us']
+    assert po.tokens_clean(test_text) == expect
+
 def test_nltk_ttr1():
     '''
     Test that the function recieves a text object with:

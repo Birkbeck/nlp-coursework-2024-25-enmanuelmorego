@@ -34,7 +34,7 @@ def fk_level(text, d):
     words = tokens_clean(text)
     total_words = len(words)
     # Count total sentences
-    text_cleaned = re.sub(r'[\n\t\r\f\v]', ' ', text)
+    text_cleaned = re.sub(r'[\n\t\r\f\v]', ' ', text).strip()
     sentences = nltk.tokenize.sent_tokenize(text_cleaned)
     total_sentences = len(sentences)
     # Count total syllables
