@@ -43,10 +43,10 @@ def fk_level(text, d):
         total_syl += count_syl(w, d)
 
     fk_level = (0.39*(total_words/total_sentences)) + (11.8*(total_syl/total_words)) - 15.59
-    # print(f"Words: {total_words}")
-    # print(f"Sentences: {total_sentences}")
-    # print(f"Syllables: {total_syl}")
-    # print(f"FK Grade Level: {fk_level}")
+    print(f"Words: {total_words}")
+    print(f"Sentences: {total_sentences}")
+    print(f"Syllables: {total_syl}")
+    print(f"FK Grade Level: {fk_level}")
     
     return fk_level
     # return {"Words": total_words,
@@ -69,8 +69,6 @@ def count_syl(word, d):
     """
     # Initialise syllable counter
     syl_count = 0
-    # Vowels
-    v = ['a','e','i','o','u']
     # Find the word in the dictionary
     w = d.get(word.lower(), False)
     if w:
@@ -81,8 +79,10 @@ def count_syl(word, d):
             # Syllables are labeled on objects that end with a number (representing the stress of pronunciation)
             if syl[-1].isdigit():
                 syl_count += 1
+        print(f"word: {word}, syllables: {syl_count}")
     # TODO clarify vowel cluster assignment
     else:
+       print(f"******** Counted by vowel clusters! {word} ******** ")
        syl_count += count_syl_vowel_cluster(word)
 
     return syl_count
@@ -240,4 +240,28 @@ def count_syl_vowel_cluster(word):
 
 if __name__ == "__main__":
     """
-    uncomment the following 
+    uncomment the following lines to run the functions once you have completed them
+    """
+    #path = Path.cwd() / "p1-texts" / "novels"
+    #print(path)
+    #df = read_novels(path) # this line will fail until you have completed the read_novels function above.
+    #print(df.head())
+    #nltk.download("cmudict")
+    #parse(df)
+    #print(df.head())
+    #print(get_ttrs(df))
+    #print(get_fks(df))
+    #df = pd.read_pickle(Path.cwd() / "pickles" /"name.pickle")
+    # print(adjective_counts(df))
+    """ 
+    for i, row in df.iterrows():
+        print(row["title"])
+        print(subjects_by_verb_count(row["parsed"], "hear"))
+        print("\n")
+
+    for i, row in df.iterrows():
+        print(row["title"])
+        print(subjects_by_verb_pmi(row["parsed"], "hear"))
+        print("\n")
+    """
+
