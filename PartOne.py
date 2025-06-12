@@ -292,24 +292,4 @@ if __name__ == "__main__":
     """
     path = Path.cwd() / "texts" / "novels"
     print(path)
-    df = read_novels(path) # this line will fail until you have completed the read_novels function above.
-    print(df.head())
-    nltk.download("cmudict")
-    #parse(df)
-    #print(df.head())
-    print(get_ttrs(df))
-    print(get_fks(df))
-    df = pd.read_pickle(Path.cwd() / "pickles" /"parsed.pickle")
-    # print(adjective_counts(df))
-    """ 
-    for i, row in df.iterrows():
-        print(row["title"])
-        print(subjects_by_verb_count(row["parsed"], "hear"))
-        print("\n")
-
-    for i, row in df.iterrows():
-        print(row["title"])
-        print(subjects_by_verb_pmi(row["parsed"], "hear"))
-        print("\n")
-    """
-
+    df = read_novels(path) # this line will fail until you have completed the read_novels

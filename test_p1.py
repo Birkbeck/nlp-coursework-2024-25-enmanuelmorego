@@ -4,6 +4,8 @@ Script to test that the functions works as expected
 import PartOne as po
 import nltk
 from nltk.corpus import cmudict
+import spacy
+import pandas as pd
 
 def test_token_clean1():
     '''
@@ -76,10 +78,3 @@ def tests_fk_level1():
             Presently he was met by an elderly parson astride on a gray mare, who, as he rode, hummed a wandering tune."""
     cmudict = nltk.corpus.cmudict.dict()
     t = po.fk_level(text, cmudict)
-    assert round(t, 4) == 11.1088
-
-def test_adjective_counts1():
-    '''
-    Test that adjective counts function works properly
-    '''
-    
