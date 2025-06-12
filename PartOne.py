@@ -204,7 +204,21 @@ def subjects_by_verb_count(doc, verb):
 
 def adjective_counts(doc):
     """Extracts the most common adjectives in a parsed document. Returns a list of tuples."""
-    pass
+
+    # initiliase dictionary for frequency count
+    adj_dict = {}
+    # Loop thru each row of the data frame
+    for i, row in doc.iterrows():
+        # Extract the spacy doc (parsed column) into an object
+        doc = row['sparse']
+        # For each doc, iterate thru each token
+        for token in doc:
+            if token.pos_ == "ADJ":
+                # Extract adjective
+                adj = token.lemma_
+                adj_dict[adj] = adj_dict.get(adj, 0) + 1
+    # Conver dict into list of tuples
+    return list(adj_dict.items())
 
 
 def tokens_clean(text):
