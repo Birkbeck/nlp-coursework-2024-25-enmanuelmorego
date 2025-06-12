@@ -77,3 +77,9 @@ def tests_fk_level1():
     cmudict = nltk.corpus.cmudict.dict()
     t = po.fk_level(text, cmudict)
     assert round(t, 4) == 11.1088
+
+def test_adjective_counts1():
+    '''
+    Test that adjective counts function works properly
+    '''
+    
