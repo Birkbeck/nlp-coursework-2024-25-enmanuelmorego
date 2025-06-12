@@ -210,9 +210,9 @@ def adjective_counts(doc):
     # Loop thru each row of the data frame
     for i, row in doc.iterrows():
         # Extract the spacy doc (parsed column) into an object
-        doc = row['sparse']
+        doc_object = row['sparse']
         # For each doc, iterate thru each token
-        for token in doc:
+        for token in doc_object:
             if token.pos_ == "ADJ":
                 # Extract adjective
                 adj = token.lemma_
