@@ -39,9 +39,13 @@ doc_p = nlp(doc)
 
 verb_subj = {}
 targets = Counter()
-for possible_subject in doc_p:
-    if possible_subject.dep == nsubj and possible_subject.head.pos == VERB:
-        head = possible_subject.head
-        #verb_subj[head, possible_subject] = verb_subj.get([head, possible_subject], 0) +1
-        targets[(head.lemma_, possible_subject.lemma_)] += 1
+# Iterate over each token in the parsed document
+for token in doc_p:
+    # Syntatic relationship of token is nominal subject, and its head is a verb
+    if token.dep == nsubj and token.head.pos == VERB:
+        # extract lemmatized versions of: verb (head) and nsubj (token),
+        verb = token.head.lemma_
+        subj = token.lemma_
+        # count pair frequency
+        targets[(verb, subj)] += 1
 print(targets)
