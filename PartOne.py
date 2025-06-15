@@ -199,6 +199,11 @@ pass
 
 def subjects_by_verb_count(doc, verb):
     """Extracts the most common subjects of a given verb in a parsed document. Returns a list."""
+
+    '''
+    Args: 
+        doc: a selected column and row from a data frame that contains the SpaCy parsed doc
+    '''
     
     '''
     The syntatic subject of a verb is the subject that performs the action that the verb refers to. 
@@ -216,8 +221,6 @@ def subjects_by_verb_count(doc, verb):
     # Initialise the output dictionary
     verb_subj = {}
     sorted_dict = {}
-    out_list = []
-    out_dict = {}
 
     # Clean the users input to ensure is a valid verb
     target_verb_l = nlp(verb)
@@ -233,39 +236,26 @@ def subjects_by_verb_count(doc, verb):
     else:
         target_verb_l = target_verb_l[0]
 
-    # Iterate over the main document
-    for i, row in doc.iterrows():
-        # Extract parsed document
-        parsed_doc = row['parsed']
-        # Extract title
-        title = row['title']
+    # Loop over the tokens in the parsed doc
+    for token in doc:
+        # Syntatic relationship of token is nominal subject, and its head is a verb
+        if token.dep == nsubj and token.head.pos == VERB:
+            # extract lemmatized versions of: verb (head) and nsubj (token),
+            verb = token.head.lemma_
+            subj = token.lemma_
+            # only count for the desired verb
+            if verb == target_verb_l:
+                # count pair frequency
+                verb_subj[(verb, subj)] = verb_subj.get((verb, subj), 0) + 1
+    # Create dict with title and sort by value
+    sorted_dict = sorted(verb_subj.items(), key = lambda item: item[1], reverse = True)
 
-        # Loop over the tokens in the parsed doc
-        for token in parsed_doc:
-            # Syntatic relationship of token is nominal subject, and its head is a verb
-            if token.dep == nsubj and token.head.pos == VERB:
-                # extract lemmatized versions of: verb (head) and nsubj (token),
-                verb = token.head.lemma_
-                subj = token.lemma_
-                # only count for the desired verb
-                if verb == target_verb_l:
-                    # count pair frequency
-                    verb_subj[(verb, subj)] = verb_subj.get((verb, subj), 0) + 1
-        # Create dict with title and sort by value
-        sorted_dict = sorted(verb_subj.items(), key = lambda item: item[1], reverse = True)
+    # Filter to top 10 - if 10 matches are available
+    if len(sorted_dict) > 10:
+        sorted_dict = sorted_dict[:10]
 
-        # Filter to top 10 - if 10 matches are available
-        if len(sorted_dict) > 10:
-            sorted_dict = sorted_dict[:10]
-        # Save output to the list
-        # Convert to list of dictionary for output
-        dict_list = [ {vs_pair: count} for vs_pair, count in sorted_dict]
-        out_dict[title] = dict_list 
-        # Reset variables
-        verb_subj = {}
-        sorted_dict = {}
-
-    return out_dict
+    #return out_dict
+    return [ {vs_pair: count} for vs_pair, count in sorted_dict]
 
 
 
@@ -368,12 +358,12 @@ if __name__ == "__main__":
     print(get_fks(df))
     df = pd.read_pickle(Path.cwd() / "pickles" /"parsed.pickle")
     print(adjective_counts(df))
-    """ 
+    
     for i, row in df.iterrows():
         print(row["title"])
         print(subjects_by_verb_count(row["parsed"], "hear"))
         print("\n")
-
+    """
     for i, row in df.iterrows():
         print(row["title"])
         print(subjects_by_verb_pmi(row["parsed"], "hear"))
