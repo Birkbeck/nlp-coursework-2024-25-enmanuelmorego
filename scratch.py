@@ -35,12 +35,24 @@ expect = [('happy', 2), ('delicious', 1), ('jealous', 1), ('soft', 2), ('green',
 # print(po.adjective_counts(df))
 from spacy.symbols import nsubj, VERB
 doc = "The cat was running for the fish. The cat runs very fast! The fish was swimming away, the cat could not catch the fish"
+doc = 'Sally hears you. Sally can hear you. Sally wants to hear you. To hear him sing is a joy for Sally'
 
 
 # doc = "Despite the heavy rain, a small group of tourists continued their hike up the mountain"
 doc_p = nlp(doc)
 
-print(po.subjects_by_verb_pmi(doc_p, 'test'))
+#print(po.subjects_by_verb_pmi(doc_p, 'to hear'))
+target_verb = 'to hear and to'
+target_verb_l = nlp(target_verb)
+target_verb_l = ([token.lemma_ for token in target_verb_l if token.pos_ == 'VERB'])
+if len(target_verb_l) > 1:
+    raise ValueError("Please enter one verb only")
+elif len(target_verb_l) < 1:
+    raise ValueError("Please enter one verb")
+else:
+    target_verb_l = target_verb_l[0]
+
+print(target_verb_l)
 
 # verb_subj = {}
 # targets = Counter()

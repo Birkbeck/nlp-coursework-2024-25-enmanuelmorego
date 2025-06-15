@@ -10,10 +10,9 @@ import pandas as pd
 import os
 import string
 import re
-import nltk
 import contractions as c
 import pickle
-from collections import Counter
+
 
 nlp = spacy.load("en_core_web_sm")
 nlp.max_length = 2000000
@@ -194,7 +193,13 @@ def get_fks(df):
 
 def subjects_by_verb_pmi(doc, target_verb):
     """Extracts the most common subjects of a given verb in a parsed document. Returns a list."""
+pass
 
+
+
+def subjects_by_verb_count(doc, verb):
+    """Extracts the most common subjects of a given verb in a parsed document. Returns a list."""
+    
     '''
     The syntatic subject of a verb is the subject that performs the action that the verb refers to. 
     For example: 'The boy drank the water'. The verb is 'drank'. We can find the syntatic subject by asking
@@ -208,7 +213,23 @@ def subjects_by_verb_pmi(doc, target_verb):
         Then, because each token has a corresponding head, we extract the corresponding head_text and its head_pos. 
             If the head_pos is verb, then we have retrieved the Verb and the Syntatic Subject of the verb
     '''
+    # Initialise the output dictionary
     verb_subj = {}
+
+    # Clean the users input to ensure is a valid verb
+    target_verb_l = nlp(verb)
+    # Only extract the verb from the string
+    target_verb_l = ([token.lemma_ for token in target_verb_l if token.pos_ == 'VERB'])
+    # Raise value error if user passes more than one verb
+    if len(target_verb_l) > 1:
+        raise ValueError("Please enter one verb only")\
+    # Raise value error if the user passes no verbs at all
+    elif len(target_verb_l) < 1:
+        raise ValueError("Please enter one verb")
+    # Save the verb as a string only if passed correctly
+    else:
+        target_verb_l = target_verb_l[0]
+
     # Iterate over each token in the parsed document
     for token in doc:
         # Syntatic relationship of token is nominal subject, and its head is a verb
@@ -216,17 +237,12 @@ def subjects_by_verb_pmi(doc, target_verb):
             # extract lemmatized versions of: verb (head) and nsubj (token),
             verb = token.head.lemma_
             subj = token.lemma_
-            # count pair frequency
-            #pair_val = f"{verb}, {subj}"
-            verb_subj[(verb, subj)] = verb_subj.get((verb, subj), 0) + 1
-            
+            # only count for the desired verb
+            if verb == target_verb_l:
+                # count pair frequency
+                verb_subj[(verb, subj)] = verb_subj.get((verb, subj), 0) + 1
+
     return verb_subj
-
-
-
-def subjects_by_verb_count(doc, verb):
-    """Extracts the most common subjects of a given verb in a parsed document. Returns a list."""
-    pass
 
 
 

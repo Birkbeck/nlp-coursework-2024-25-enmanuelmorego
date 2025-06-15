@@ -1,6 +1,7 @@
 '''
 Script to test that the functions works as expected
 '''
+import pytest
 import PartOne as po
 import nltk
 from nltk.corpus import cmudict
@@ -105,3 +106,21 @@ def test_adjective_counts1():
     expect = [('happy', 2), ('delicious', 1), ('jealous', 1), ('soft', 2), ('green', 1), ('hot', 3), ('tall', 1), ('fast', 1)]
 
     assert po.adjective_counts(df) == expect
+
+def test_subjects_by_verb1():
+    '''
+    Test that function handles bad input as expected
+    '''
+    nlp = spacy.load("en_core_web_sm")
+    doc = "Sally hears you. Sally can hear you. Sally wants to hear you. To hear him sing is a joy for Sally"
+    doc_p = nlp(doc)
+
+    # Passing multiple verbs
+    with pytest.raises(ValueError):
+        po.subjects_by_verb_count(doc_p, "to hear running testing")
+
+    # Passing non verbs
+    with pytest.raises(ValueError):
+        po.subjects_by_verb_count(doc_p, "not a verb")
+
+
