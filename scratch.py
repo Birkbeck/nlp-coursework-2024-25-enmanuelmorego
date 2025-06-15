@@ -34,11 +34,9 @@ nlp = spacy.load("en_core_web_sm")
 df['parsed'] = df['text'].apply(nlp)
 
 out_dict = po.subjects_by_verb_count(df, 'to run')
+expect_len = [2,3,0]
+i = 0
+print((out_dict.items()))
+for key, value in out_dict.items():
+    print(f"{len(value)}")
 
-for title, pairs_list in out_dict.items():
-    print(f"{title}:")
-    if pairs_list:
-        for pair_dict in pairs_list:
-            print(f"\t{pair_dict}")
-    else:
-        print("\t(empty)")
