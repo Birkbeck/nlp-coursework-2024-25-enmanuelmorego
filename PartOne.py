@@ -217,6 +217,7 @@ def subjects_by_verb_count(doc, verb):
     verb_subj = {}
     full_dict = {}
     out_list = []
+    out_dict = {}
 
     # Clean the users input to ensure is a valid verb
     target_verb_l = nlp(verb)
@@ -251,14 +252,18 @@ def subjects_by_verb_count(doc, verb):
                     # count pair frequency
                     verb_subj[(verb, subj)] = verb_subj.get((verb, subj), 0) + 1
         # Create dict with title and sort by value
-        full_dict[title] = dict(sorted(verb_subj.items(), key = lambda item: item[1], reverse = True))
+        full_dict = sorted(verb_subj.items(), key = lambda item: item[1], reverse = True)
+        # Filter to top 10 - if 10 matches are available
+        if len(full_dict) > 10:
+            full_dict = full_dict[:10]
         # Save output to the list
-        out_list.append(full_dict)
+        #out_list.append(full_dict)
+        out_dict[title] = out_dict.get(title, full_dict)
         # Reset variables
         verb_subj = {}
         full_dict = {}
 
-    return out_list
+    return out_dict
 
 
 
