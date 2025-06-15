@@ -33,4 +33,12 @@ nlp = spacy.load("en_core_web_sm")
 # Add new column with spaCy Doc objects
 df['parsed'] = df['text'].apply(nlp)
 
-print(po.subjects_by_verb_count(df, 'to run'))
+out_dict = po.subjects_by_verb_count(df, 'to run')
+
+for title, pairs_list in out_dict.items():
+    print(f"{title}:")
+    if pairs_list:
+        for pair_dict in pairs_list:
+            print(f"\t{pair_dict}")
+    else:
+        print("\t(empty)")

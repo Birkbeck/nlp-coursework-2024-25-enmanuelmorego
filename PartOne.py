@@ -215,7 +215,7 @@ def subjects_by_verb_count(doc, verb):
     '''
     # Initialise the output dictionary
     verb_subj = {}
-    full_dict = {}
+    sorted_dict = {}
     out_list = []
     out_dict = {}
 
@@ -252,16 +252,18 @@ def subjects_by_verb_count(doc, verb):
                     # count pair frequency
                     verb_subj[(verb, subj)] = verb_subj.get((verb, subj), 0) + 1
         # Create dict with title and sort by value
-        full_dict = sorted(verb_subj.items(), key = lambda item: item[1], reverse = True)
+        sorted_dict = sorted(verb_subj.items(), key = lambda item: item[1], reverse = True)
+
         # Filter to top 10 - if 10 matches are available
-        if len(full_dict) > 10:
-            full_dict = full_dict[:10]
+        if len(sorted_dict) > 10:
+            sorted_dict = sorted_dict[:10]
         # Save output to the list
-        #out_list.append(full_dict)
-        out_dict[title] = out_dict.get(title, full_dict)
+        # Convert to list of dictionary for output
+        dict_list = [ {vs_pair: count} for vs_pair, count in sorted_dict]
+        out_dict[title] = dict_list 
         # Reset variables
         verb_subj = {}
-        full_dict = {}
+        sorted_dict = {}
 
     return out_dict
 
