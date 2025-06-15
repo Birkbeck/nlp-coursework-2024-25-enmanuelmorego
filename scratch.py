@@ -18,51 +18,19 @@ nlp = spacy.load("en_core_web_sm")
 # Create fake data to test function
 data = {'title': ['novel1', 'novel2', 'novel3'],
         'text': ['the happy cat felt happiness in the delicious meal, but the happier dog looked at it with the most jealous eyes',
-                 'The broccoli was soft, green and hot, the soft carrot was also hot, but the potatoes were the hottest',
-                 'the tall, and very fast athlete went running in the rain']}
+                 'The broccoli was soft, green and hot, the soft carrot was also hot, but the potatoes were the hottest. The potatoes were having a run',
+                 'the tall, and very fast athlete went running in the rain. The kind was running']}
 
+data = {'title': ['novel1', 'novel2', 'novel3'],
+        'text': ['the boy ran. The boy runs very fast. The kids were running',
+                 'the girl was running. I also run. I ran home. They ran very far',
+                 'the dog barked']}
 df = pd.DataFrame(data)
-# Add parsed column 
-parsed_list = []
-for index, row in df.iterrows():
-    parsed_obj = nlp(row['text'])
-    parsed_list.append(parsed_obj)
-    
-df['parsed'] = parsed_list
 
-expect = [('happy', 2), ('delicious', 1), ('jealous', 1), ('soft', 2), ('green', 1), ('hot', 3), ('tall', 1), ('fast', 1)]
+# Load spaCy model
+nlp = spacy.load("en_core_web_sm")
 
-# print(po.adjective_counts(df))
-from spacy.symbols import nsubj, VERB
-doc = "The cat was running for the fish. The cat runs very fast! The fish was swimming away, the cat could not catch the fish"
-doc = 'Sally hears you. Sally can hear you. Sally wants to hear you. To hear him sing is a joy for Sally'
+# Add new column with spaCy Doc objects
+df['parsed'] = df['text'].apply(nlp)
 
-
-# doc = "Despite the heavy rain, a small group of tourists continued their hike up the mountain"
-doc_p = nlp(doc)
-
-#print(po.subjects_by_verb_pmi(doc_p, 'to hear'))
-target_verb = 'to hear and to'
-target_verb_l = nlp(target_verb)
-target_verb_l = ([token.lemma_ for token in target_verb_l if token.pos_ == 'VERB'])
-if len(target_verb_l) > 1:
-    raise ValueError("Please enter one verb only")
-elif len(target_verb_l) < 1:
-    raise ValueError("Please enter one verb")
-else:
-    target_verb_l = target_verb_l[0]
-
-print(target_verb_l)
-
-# verb_subj = {}
-# targets = Counter()
-# # Iterate over each token in the parsed document
-# for token in doc_p:
-#     # Syntatic relationship of token is nominal subject, and its head is a verb
-#     if token.dep == nsubj and token.head.pos == VERB:
-#         # extract lemmatized versions of: verb (head) and nsubj (token),
-#         verb = token.head.lemma_
-#         subj = token.lemma_
-#         # count pair frequency
-#         targets[(verb, subj)] += 1
-# print(targets)
+print(po.subjects_by_verb_count(df, 'to run'))

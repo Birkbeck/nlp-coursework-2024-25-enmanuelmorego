@@ -215,6 +215,8 @@ def subjects_by_verb_count(doc, verb):
     '''
     # Initialise the output dictionary
     verb_subj = {}
+    full_dict = {}
+    out_list = []
 
     # Clean the users input to ensure is a valid verb
     target_verb_l = nlp(verb)
@@ -222,7 +224,7 @@ def subjects_by_verb_count(doc, verb):
     target_verb_l = ([token.lemma_ for token in target_verb_l if token.pos_ == 'VERB'])
     # Raise value error if user passes more than one verb
     if len(target_verb_l) > 1:
-        raise ValueError("Please enter one verb only")\
+        raise ValueError("Please enter one verb only")
     # Raise value error if the user passes no verbs at all
     elif len(target_verb_l) < 1:
         raise ValueError("Please enter one verb")
@@ -230,19 +232,33 @@ def subjects_by_verb_count(doc, verb):
     else:
         target_verb_l = target_verb_l[0]
 
-    # Iterate over each token in the parsed document
-    for token in doc:
-        # Syntatic relationship of token is nominal subject, and its head is a verb
-        if token.dep == nsubj and token.head.pos == VERB:
-            # extract lemmatized versions of: verb (head) and nsubj (token),
-            verb = token.head.lemma_
-            subj = token.lemma_
-            # only count for the desired verb
-            if verb == target_verb_l:
-                # count pair frequency
-                verb_subj[(verb, subj)] = verb_subj.get((verb, subj), 0) + 1
+    # Iterate over the main document
+    for i, row in doc.iterrows():
+        # Extract parsed document
+        parsed_doc = row['parsed']
+        # Extract title
+        title = row['title']
 
-    return verb_subj
+        # Loop over the tokens in the parsed doc
+        for token in parsed_doc:
+            # Syntatic relationship of token is nominal subject, and its head is a verb
+            if token.dep == nsubj and token.head.pos == VERB:
+                # extract lemmatized versions of: verb (head) and nsubj (token),
+                verb = token.head.lemma_
+                subj = token.lemma_
+                # only count for the desired verb
+                if verb == target_verb_l:
+                    # count pair frequency
+                    verb_subj[(verb, subj)] = verb_subj.get((verb, subj), 0) + 1
+        # Create dict with title and sort by value
+        full_dict[title] = dict(sorted(verb_subj.items(), key = lambda item: item[1], reverse = True))
+        # Save output to the list
+        out_list.append(full_dict)
+        # Reset variables
+        verb_subj = {}
+        full_dict = {}
+
+    return out_list
 
 
 
