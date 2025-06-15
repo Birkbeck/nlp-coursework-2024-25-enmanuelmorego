@@ -123,4 +123,30 @@ def test_subjects_by_verb1():
     with pytest.raises(ValueError):
         po.subjects_by_verb_count(doc_p, "not a verb")
 
-d
+def test_subjects_by_verb2():
+    '''
+    test function with valid output
+    '''
+    # Set data
+    data = {'title': ['novel1', 'novel2', 'novel3'],
+            'text': ['the boy ran. The boy runs very fast. The kids were running',
+                    'the girl was running. I also run. I ran home. They ran very far',
+                    'the dog barked']}
+    df = pd.DataFrame(data)
+
+    # Load spaCy model
+    nlp = spacy.load("en_core_web_sm")
+
+    # Add new column with spaCy Doc objects
+    df['parsed'] = df['text'].apply(nlp)
+
+    # Check that each subdict also is the correct length
+    expect_len = [2,3,0]
+    i = 0
+    for i, row in df.iterrows():
+        assert len(po.subjects_by_verb_count(row["parsed"], "run")) == expect_len[i]
+        i += 1
+
+ 
+
+

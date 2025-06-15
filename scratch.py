@@ -35,4 +35,15 @@ df['parsed'] = df['text'].apply(nlp)
 
 
 
-#out_dict = po.subjects_by_verb_count(df['par
+#out_dict = po.subjects_by_verb_count(df['parsed'], 'to run')
+expect_len = [2,3,0]
+i = 0
+for i, row in df.iterrows():
+    print(row["title"])
+    print(po.subjects_by_verb_count(row["parsed"], "run"), sep = '\t\n')
+    print(len(po.subjects_by_verb_count(row["parsed"], "run")))
+    print("\n")
+
+# for key, value in out_dict.items():
+#     print(f"{len(value)}")
+
