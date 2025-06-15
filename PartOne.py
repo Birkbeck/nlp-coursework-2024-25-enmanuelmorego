@@ -4,6 +4,7 @@
 
 import nltk
 import spacy
+from spacy.symbols import nsubj, VERB
 from pathlib import Path
 import pandas as pd
 import os
@@ -12,6 +13,7 @@ import re
 import nltk
 import contractions as c
 import pickle
+from collections import Counter
 
 nlp = spacy.load("en_core_web_sm")
 nlp.max_length = 2000000
@@ -192,7 +194,33 @@ def get_fks(df):
 
 def subjects_by_verb_pmi(doc, target_verb):
     """Extracts the most common subjects of a given verb in a parsed document. Returns a list."""
-    pass
+
+    '''
+    The syntatic subject of a verb is the subject that performs the action that the verb refers to. 
+    For example: 'The boy drank the water'. The verb is 'drank'. We can find the syntatic subject by asking
+    who drank the water? the boy. Hence the syntatic subject in this case is 'the boy'
+
+    Spacy provides head and child relationship to determine how the words are conected by the syntatic arch. Each
+    word has a single corresponding head. 
+
+    We can iterate over each token (word) and check the `dep` attribute (dependency)
+        If the value is `nsubj` then the word is a nominal subject, which means that the token is functioning as the grammatical subject
+        Then, because each token has a corresponding head, we extract the corresponding head_text and its head_pos. 
+            If the head_pos is verb, then we have retrieved the Verb and the Syntatic Subject of the verb
+    '''
+    verb_subj = {}
+    # Iterate over each token in the parsed document
+    for token in doc:
+        # Syntatic relationship of token is nominal subject, and its head is a verb
+        if token.dep == nsubj and token.head.pos == VERB:
+            # extract lemmatized versions of: verb (head) and nsubj (token),
+            verb = token.head.lemma_
+            subj = token.lemma_
+            # count pair frequency
+            #pair_val = f"{verb}, {subj}"
+            verb_subj[(verb, subj)] = verb_subj.get((verb, subj), 0) + 1
+            
+    return verb_subj
 
 
 

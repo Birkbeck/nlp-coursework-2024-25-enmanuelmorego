@@ -34,18 +34,23 @@ expect = [('happy', 2), ('delicious', 1), ('jealous', 1), ('soft', 2), ('green',
 
 # print(po.adjective_counts(df))
 from spacy.symbols import nsubj, VERB
-doc = "The cat was running for the fish. The fish was swimming away, the cat could not catch the fish"
+doc = "The cat was running for the fish. The cat runs very fast! The fish was swimming away, the cat could not catch the fish"
+
+
+# doc = "Despite the heavy rain, a small group of tourists continued their hike up the mountain"
 doc_p = nlp(doc)
 
-verb_subj = {}
-targets = Counter()
-# Iterate over each token in the parsed document
-for token in doc_p:
-    # Syntatic relationship of token is nominal subject, and its head is a verb
-    if token.dep == nsubj and token.head.pos == VERB:
-        # extract lemmatized versions of: verb (head) and nsubj (token),
-        verb = token.head.lemma_
-        subj = token.lemma_
-        # count pair frequency
-        targets[(verb, subj)] += 1
-print(targets)
+print(po.subjects_by_verb_pmi(doc_p, 'test'))
+
+# verb_subj = {}
+# targets = Counter()
+# # Iterate over each token in the parsed document
+# for token in doc_p:
+#     # Syntatic relationship of token is nominal subject, and its head is a verb
+#     if token.dep == nsubj and token.head.pos == VERB:
+#         # extract lemmatized versions of: verb (head) and nsubj (token),
+#         verb = token.head.lemma_
+#         subj = token.lemma_
+#         # count pair frequency
+#         targets[(verb, subj)] += 1
+# print(targets)
