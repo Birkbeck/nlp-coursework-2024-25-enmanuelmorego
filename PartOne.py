@@ -203,6 +203,11 @@ def subjects_by_verb_count(doc, verb):
     '''
     Args: 
         doc: a selected column and row from a data frame that contains the SpaCy parsed doc
+        verb: A verb to search in the data and find the corresponding syntatic subject
+    
+    Returns:
+        A list of dictionaries containing the verb-subject pair as key, and the frequency count as the value. 
+        The list is sorted in descending order (more frequent counts first), and returns the first 10 available items in the list
     '''
     
     '''
@@ -255,7 +260,7 @@ def subjects_by_verb_count(doc, verb):
         sorted_dict = sorted_dict[:10]
 
     #return out_dict
-    return [ {vs_pair: count} for vs_pair, count in sorted_dict]
+    return [{vs_pair: count} for vs_pair, count in sorted_dict]
 
 
 
