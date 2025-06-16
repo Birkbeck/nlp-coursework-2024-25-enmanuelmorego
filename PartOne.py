@@ -194,6 +194,29 @@ def get_fks(df):
 
 def subjects_by_verb_pmi(doc, target_verb):
     """Extracts the most common subjects of a given verb in a parsed document. Returns a list."""
+
+    '''
+    Args: 
+        doc: a selected column and row from a data frame that contains the SpaCy parsed doc
+        target_verb: A verb to search in the data and find the corresponding syntatic subject
+    
+    Returns:
+        A list of dictionaries containing the top 10 most common syntatic subjects for a given verb
+        ordered by their Pointwise Mutual Information (descending)
+   
+    Note:
+        The function below calculates the Pointwise Mutual Information (PMI) between the top 10 syntatic subject of the verbs.
+   
+    ==IMPORTANT==: 
+    The PMI was calculated instead of the Positive Pointwise Mutual Information (PPMI) as that was the promt specification
+    However, usually PPMI is preferred as per the textbook
+    The difference between the PPMI and Pointwise Mutual Information (PMI) is that PPMI takes the max between 0 and PMI
+    Meaning, all negative PMI become 0
+        - Why transform negative PMI to 0? 
+            A negative PMI indicates that the word pair appeared less often than chance. However, not all words are equally common. This 
+            poses the risk that less common word pairs might return a negative PMI not becuase they appeared less than chance, but simply 
+            because not enough data was collected to accurately represent the less common words. 
+    '''
     # Extract the top 10 subject-verb pairs 
     verb_subject = subjects_by_verb_count(doc, target_verb)
     # Extract unique words from the s-v pairs
@@ -220,7 +243,7 @@ def subjects_by_verb_pmi(doc, target_verb):
     # Probability of the verb (context)
     p_c = total_existing[target_verb]/total_words
     # Initialise dictionary for ppmi scores
-    ppmi_dict = {}
+    pmi_dict = {}
     # Loop over the dictionary of the 10 s-v pairs
     for d in verb_subject:
         for key, value in d.items():
@@ -231,17 +254,19 @@ def subjects_by_verb_pmi(doc, target_verb):
             # Calculate PMI
             ## Only if p_w_ and p_c are not 0
             if p_c == 0 or p_w == 0:
-                ppmi = 0
+                pmi = 0
             else:
                 pmi = p_wc/(p_w * p_c)
                 pmi = math.log2(pmi)
-                ppmi = max(pmi,0)
+              #  ppmi = max(pmi,0)
             # Add value to final dict
-            ppmi_dict[key] = ppmi_dict.get(key, round(ppmi,3))
-    # Sort final dictionary
-    ppmi_dict = sorted(ppmi_dict.items(), key = lambda item: item[1], reverse = True)
+            pmi_dict[key] = pmi_dict.get(key, round(pmi,3))
+            pmi_dict[key] = pmi_dict.get(key, round(pmi,3))
 
-    return [{vs_pair: count} for vs_pair, count in ppmi_dict]
+    # Sort final dictionary
+    pmi_dict = sorted(pmi_dict.items(), key = lambda item: item[1], reverse = True)
+
+    return [{vs_pair: count} for vs_pair, count in pmi_dict]
 
 
 
