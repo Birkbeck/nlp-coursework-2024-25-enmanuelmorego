@@ -34,24 +34,11 @@ nlp = spacy.load("en_core_web_sm")
 df['parsed'] = df['text'].apply(nlp)
 
 df_mini = df.iloc[0]
-# count of co occurrence
-verb_subject = po.subjects_by_verb_count(df_mini['parsed'], 'run')
-print('\n')
-print(f"1. Counts of Verbs and Subjects:\n\t{verb_subject}\n")
 
-# Extract unique objects
-unique_w = set()
-for d in verb_subject:
-    for k in d.keys():
-        for ind in k:
-            unique_w.add(ind)
+df = pd.read_pickle(Path.cwd() / "pickles" /"parsed.pickle")
 
-print(f"2. Extract unique words for total counts: \n\t{unique_w}\n")
-
-# Count word occurrence in whole document, and total tokens in doc
-total_words = 0
-total_existing = {}
-for token in df_mini['parsed']:
-    # Ensure only words are counted
-    if token.is_lpha():
-        print(token)
+for i, row in df.iterrows():
+    print("\nTop 10 Subjects by verh 'hear' - Organised by PPMI")
+    print(row["title"])
+    print(po.subjects_by_verb_pmi(row["parsed"], "hear"))
+    print("\n")

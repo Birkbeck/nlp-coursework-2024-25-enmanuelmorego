@@ -12,6 +12,7 @@ import string
 import re
 import contractions as c
 import pickle
+import math
 
 
 nlp = spacy.load("en_core_web_sm")
@@ -193,7 +194,54 @@ def get_fks(df):
 
 def subjects_by_verb_pmi(doc, target_verb):
     """Extracts the most common subjects of a given verb in a parsed document. Returns a list."""
-pass
+    # Extract the top 10 subject-verb pairs 
+    verb_subject = subjects_by_verb_count(doc, target_verb)
+    # Extract unique words from the s-v pairs
+    unique_w = set()
+    for d in verb_subject:
+        for k in d.keys():
+            for ind in k:
+                unique_w.add(ind)
+
+    # Initialise total words counter
+    total_words = 0
+    # Initialise counter for the words of the subject-verb pairs
+    total_existing = {w: 0 for w in unique_w}
+    # Count objects
+    for token in doc:
+        # Only include words, not punctuation marks, etc
+        if token.text.isalpha():
+            total_words += 1
+            # Use lemmatized version of words
+            word_lemma = token.lemma_
+            if word_lemma in total_existing:
+                total_existing[word_lemma] += 1
+        
+    # Probability of the verb (context)
+    p_c = total_existing[target_verb]/total_words
+    # Initialise dictionary for ppmi scores
+    ppmi_dict = {}
+    # Loop over the dictionary of the 10 s-v pairs
+    for d in verb_subject:
+        for key, value in d.items():
+            # probability of the pair verb-subject
+            p_wc = value/total_words
+            # Probability of the subject (word)
+            p_w = total_existing[key[1]]/total_words
+            # Calculate PMI
+            ## Only if p_w_ and p_c are not 0
+            if p_c == 0 or p_w == 0:
+                ppmi = 0
+            else:
+                pmi = p_wc/(p_w * p_c)
+                pmi = math.log2(pmi)
+                ppmi = max(pmi,0)
+            # Add value to final dict
+            ppmi_dict[key] = ppmi_dict.get(key, round(ppmi,3))
+    # Sort final dictionary
+    ppmi_dict = sorted(ppmi_dict.items(), key = lambda item: item[1], reverse = True)
+
+    return [{vs_pair: count} for vs_pair, count in ppmi_dict]
 
 
 
@@ -368,10 +416,11 @@ if __name__ == "__main__":
         print(row["title"])
         print(subjects_by_verb_count(row["parsed"], "hear"))
         print("\n")
-    """
+    
+    print("\nTop 10 Subjects by verh 'hear' - Organised by PPMI")
     for i, row in df.iterrows():
         print(row["title"])
         print(subjects_by_verb_pmi(row["parsed"], "hear"))
         print("\n")
-    """
+    
 
