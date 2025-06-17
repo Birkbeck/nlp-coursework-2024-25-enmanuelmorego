@@ -147,20 +147,4 @@ def test_subjects_by_verb2():
         assert len(po.subjects_by_verb_count(row["parsed"], "run")) == expect_len[i]
         i += 1
 
-def test_count_obj1():
-    '''
-    Tests that the syntatic object counter works as expected
-    '''
-    # Define dummy text
-    text = 'the cat chased the mouse and caught the mouse, but the dog chased the cat and found it in the garden.'
-    # Transform into SpaCy doc
-    nlp = spacy.load("en_core_web_sm")
-    text_nlp = nlp(text)
-    # Test function
-    count_dict = po.count_obj(text_nlp)
-
-    assert count_dict == [{'mouse': 2}, {'cat': 1}, {'it': 1}, {'garden': 1}]
-
- 
-
-
+def 

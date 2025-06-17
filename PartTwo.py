@@ -10,8 +10,7 @@ def read_csv(path=Path.cwd() / "texts" / "p2-texts"):
     Function to load csv files into pandas data frames
 
     Args:
-        User can pass filepath as dictionary or key value pairs
-        If no argument is given, the function defaults to reading handsard40000.csv
+        Function defaults to a specific location to search for the files unless otherwise specified
 
     Returns
         Pandas data frame
