@@ -458,12 +458,19 @@ if __name__ == "__main__":
     df = pd.read_pickle(Path.cwd() / "pickles" /"parsed.pickle")
     print(adjective_counts(df))
     
+    print("\n*** Top 10 Syntatic objects overall in the text - Organised by count ***\n")
+    for i, row in df.iterrows():
+        print(row['title'])
+        print(count_obj(row['parsed']))
+        print("\n")
+
+    print("\n*** Top 10 Subjects by verb 'hear' - Organised by count ***\n")
     for i, row in df.iterrows():
         print(row["title"])
         print(subjects_by_verb_count(row["parsed"], "hear"))
         print("\n")
     
-    print("\nTop 10 Subjects by verh 'hear' - Organised by PPMI")
+    print("\n*** Top 10 Subjects by verb 'hear' - Organised by PMI ***\n")
     for i, row in df.iterrows():
         print(row["title"])
         print(subjects_by_verb_pmi(row["parsed"], "hear"))
