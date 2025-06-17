@@ -418,12 +418,14 @@ def count_obj(doc):
     '''
     # Inititalise dictionary
     syntatic_object = {}
+    # Get tags to identify objects
+    object_tags = ['dobj', 'iobj', 'oprd', 'obj', 'pobj']
 
     # Extract words
     for token in doc:
         # Extract the type of dependency, explained
-        dep_explained = spacy.explain(token.dep_)
-        if dep_explained is not None and "object" in dep_explained:
+        dep_tag = token.dep_
+        if dep_tag in object_tags:
             # Lemmatize word
             word_lemma = token.lemma_
             syntatic_object[word_lemma] = syntatic_object.get(word_lemma, 0) + 1 
