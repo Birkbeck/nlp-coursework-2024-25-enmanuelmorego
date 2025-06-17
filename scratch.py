@@ -20,25 +20,6 @@ import spacy
 #         'text': ['the happy cat felt happiness in the delicious meal, but the happier dog looked at it with the most jealous eyes',
 #                  'The broccoli was soft, green and hot, the soft carrot was also hot, but the potatoes were the hottest. The potatoes were having a run',
 #                  'the tall, and very fast athlete went running in the rain. The kind was running']}
+import PartTwo as pt
 
-data = {'title': ['novel1', 'novel2', 'novel3'],
-        'text': ['the boy ran. The boy runs very fast. The kids were running',
-                 'the girl was running. I also run. I ran home. They ran very far',
-                 'the dog barked']}
-df = pd.DataFrame(data)
-
-# # Load spaCy model
-nlp = spacy.load("en_core_web_sm")
-
-# # Add new column with spaCy Doc objects
-df['parsed'] = df['text'].apply(nlp)
-
-df_mini = df.iloc[0]
-
-df = pd.read_pickle(Path.cwd() / "pickles" /"parsed.pickle")
-
-for i, row in df.iterrows():
-    print("\nTop 10 Subjects by verh 'hear' - Organised by PPMI")
-    print(row["title"])
-    print(po.subjects_by_verb_pmi(row["parsed"], "hear"))
-    print("\n")
+print(pt.read_political_speeches_csv())
