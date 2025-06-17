@@ -147,6 +147,11 @@ def test_subjects_by_verb2():
         assert len(po.subjects_by_verb_count(row["parsed"], "run")) == expect_len[i]
         i += 1
 
+def test_count_obj1():
+    '''
+    Tests that the syntatic object counter works as expected
+    '''
+
  
 
 

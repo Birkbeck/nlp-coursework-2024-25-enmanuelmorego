@@ -58,8 +58,6 @@ def fk_level(text, d):
     #         "Syllables": total_syl,
     #         "FK Grade Level": fk_level}
 
-
-
 def count_syl(word, d):
     """Counts the number of syllables in a word given a dictionary of syllables per word.
     if the word is not in the dictionary, syllables are estimated by counting vowel clusters
@@ -124,8 +122,6 @@ def read_novels(path=Path.cwd() / "texts" / "novels"):
 
     # Return sorted data frame with clean indeces
     return df.sort_values("year").reset_index(drop=True)
-   
-
 
 def parse(df, store_path=Path.cwd() / "pickles", out_name="parsed.pickle"):
     """Parses the text of a DataFrame using spaCy, stores the parsed docs as a column and writes 
@@ -159,7 +155,6 @@ def parse(df, store_path=Path.cwd() / "pickles", out_name="parsed.pickle"):
 
     return df
 
-
 def nltk_ttr(text):
     """Calculates the type-token ratio of a text. Text is tokenized using nltk.word_tokenize."""
     # Replace words separated by "-" with " " and transform text to lower case
@@ -174,14 +169,12 @@ def nltk_ttr(text):
     
     return ttr
 
-
 def get_ttrs(df):
     """helper function to add ttr to a dataframe"""
     results = {}
     for i, row in df.iterrows():
         results[row["title"]] = nltk_ttr(row["text"])
     return results
-
 
 def get_fks(df):
     """helper function to add fk scores to a dataframe"""
@@ -190,7 +183,6 @@ def get_fks(df):
     for i, row in df.iterrows():
         results[row["title"]] = round(fk_level(row["text"], cmudict), 4)
     return results
-
 
 def subjects_by_verb_pmi(doc, target_verb):
     """Extracts the most common subjects of a given verb in a parsed document. Returns a list."""
@@ -268,8 +260,6 @@ def subjects_by_verb_pmi(doc, target_verb):
 
     return [{vs_pair: count} for vs_pair, count in pmi_dict]
 
-
-
 def subjects_by_verb_count(doc, verb):
     """Extracts the most common subjects of a given verb in a parsed document. Returns a list."""
 
@@ -335,8 +325,6 @@ def subjects_by_verb_count(doc, verb):
     #return out_dict
     return [{vs_pair: count} for vs_pair, count in sorted_dict]
 
-
-
 def adjective_counts(doc):
     """Extracts the most common adjectives in a parsed document. Returns a list of tuples."""
 
@@ -354,7 +342,6 @@ def adjective_counts(doc):
                 adj_dict[adj] = adj_dict.get(adj, 0) + 1
     # Conver dict into list of tuples
     return list(adj_dict.items())
-
 
 def tokens_clean(text):
     # TODO maybe this is not needed
@@ -418,6 +405,40 @@ def count_syl_vowel_cluster(word):
         syl_count += 1
 
     return syl_count
+
+def count_obj(doc):
+    '''
+    Function that counts the syntatic objects in a document
+    
+    Args:
+        doc: A column of a dataframe containing Soacy Doc object
+    
+    Returns:
+        A list of the top 10 most common objects, lemmatized, along with the count, presented as a dictionary per each item [{lemma_word1: count}, ..., {lemma_wordn: count}]
+    '''
+    # Inititalise dictionary
+    syntatic_object = {}
+
+    # Extract words
+    for token in doc:
+        # Extract the type of dependency, explained
+        dep_explained = spacy.explain(token.dep_)
+        if dep_explained is not None and "object" in dep_explained:
+            # Lemmatize word
+            word_lemma = token.lemma_
+            syntatic_object[word_lemma] = syntatic_object.get(word_lemma, 0) + 1 
+        
+    # Sort dictionary
+    sorted_dict = sorted(syntatic_object.items(), key = lambda item: item[1], reverse = True)
+
+    # Filter to top 10 - if 10 matches are available
+    if len(sorted_dict) > 10:
+        sorted_dict = sorted_dict[:10]
+
+    #return out_dict
+    return [{vs_pair: count} for vs_pair, count in sorted_dict]
+
+
 
 
 
