@@ -47,16 +47,9 @@ def fk_level(text, d):
         total_syl += count_syl(w, d)
 
     fk_level = (0.39*(total_words/total_sentences)) + (11.8*(total_syl/total_words)) - 15.59
-    # print(f"Words: {total_words}")
-    # print(f"Sentences: {total_sentences}")
-    # print(f"Syllables: {total_syl}")
-    # print(f"FK Grade Level: {fk_level}")
     
     return fk_level
-    # return {"Words": total_words,
-    #         "Sentences": total_sentences,
-    #         "Syllables": total_syl,
-    #         "FK Grade Level": fk_level}
+
 
 def count_syl(word, d):
     """Counts the number of syllables in a word given a dictionary of syllables per word.
@@ -81,7 +74,6 @@ def count_syl(word, d):
             # Syllables are labeled on objects that end with a number (representing the stress of pronunciation)
             if syl[-1].isdigit():
                 syl_count += 1
-    # TODO clarify vowel cluster assignment
     else:
        syl_count += count_syl_vowel_cluster(word)
 
@@ -163,7 +155,6 @@ def nltk_ttr(text):
     tokens = nltk.word_tokenize(text)
     # Remove punctuation marks (only keep alpha characters)
     tokens = [word for word in tokens if word.isalpha()]
-    #tokens = tokens_clean(text) See first # TODO
     # Calculate type-token ratio
     ttr = round(len(set(tokens))/len(tokens),4)
     
@@ -344,7 +335,6 @@ def adjective_counts(doc):
     return list(adj_dict.items())
 
 def tokens_clean(text):
-    # TODO maybe this is not needed
     '''
     Function that takes a given text and cleans it by:
         - Making all text lower case
