@@ -34,7 +34,17 @@ def speeches_clean(df):
         - Column 'speech_class': removes all rows where value is NOT 'Speech'
         - Column 'speech': removes any entries where the length of the speech is less than 1000 characters
     '''
-    # Clean Labour (Co-op) values
+    # (a).i Clean Labour (Co-op) values
     df_cleaned = df.replace('Labour (Co-op)', 'Labour')
+
+    # (a).ii Remove rows where the value of 'party' is not one of the 4 most common parties
+    parties_count = df_cleaned['party'].value_counts().sort_values()
+    # # Extract the name of the 4 most common parties 
+    top4_parties = parties_count.index[:4].tolist()
+    # # Filter to top 4 most common parties
+    df_cleaned = df_cleaned[df_cleaned['party'].isin(top4_parties)]
+
+    # (a).ii Remove rows where 'party' == 'Speaker'
+    df_cleaned = df_cleaned[df_cleaned['party'] != 'Speaker']
 
     return df_cleaned
