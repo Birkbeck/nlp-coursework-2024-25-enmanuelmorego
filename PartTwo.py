@@ -6,6 +6,7 @@ from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
+from sklearn.svm import LinearSVC
 
 
 
@@ -81,12 +82,41 @@ def data_pre_processing(df):
 
     # Return objects
     return x_train, x_test, y_train, y_test, train['speech'], test['speech']
+
+
+def ml_models(df):
+    '''
+    Pipeline to train and run ML models
+    '''    
+    # Prepare data for ML
+    x_train, x_test, y_train, y_test, train_text, test_text = data_pre_processing(df)
+
+    # Train random forest
+    random_forest = RandomForestClassifier(n_estimators=300, n_jobs = -1)
+    random_forest.fit(x_train, y_train)
+    random_forest_y_predict = random_forest.predict(x_test)
+
+    # Train SVM
+    svm = LinearSVC()
+    svm.fit(x_train, y_train)
+    svm_y_predict = svm.predict(x_test)
+
+    # Get label names
+    target_names = y_test.unique()
+
+    # Results section 
+    print(f"{"="*20} Random Forest Performance {"="*20}")
+    print(classification_report(y_test, random_forest_y_predict, target_names = target_names))
+
+    print(f"{"="*20} SVC Performance {"="*20}")
+    print(classification_report(y_test, svm_y_predict, target_names = target_names))
    
 
 if __name__ == "__main__":
     
     '''Section A'''
     print("\n\t\t==== Section A ====\n")
+    print(f"Data load and initial cleaning...")
     
     # Load speeches data frame
     df = read_speeches_csv()
@@ -95,15 +125,14 @@ if __name__ == "__main__":
     print(f"Dimensions of cleaned speeches data frame")
     print(df_cleaned.shape)
 
+    '''Section B'''
+    print("\n\t\t==== Section B ====\n")
+    print(f"Data preprocessing for ML models - see function data_pre_processing...")
+
     print("\n\t\t==== Section C ====\n")
+    print(f"Trains and compare performance of Random Forest vs SVM with a linear kernel...")
+    ml_models(df_cleaned)
 
-    # Prepare data for ML
-    x_train, x_test, y_train, y_test, train_text, test_text = data_pre_processing(df_cleaned)
-
-    # Train random forest
-    random_forest = RandomForestClassifier(n_estimators=300, n_jobs = -1)
-    random_forest.fit(x_train, y_train)
-    random_forest_y_predict = random_forest.predict(x_test)
 
     '''
     F1 Score: 2 / ((1 / precision) + (1 / recall)) is a combination of the precision and recall metrics
@@ -118,7 +147,3 @@ if __name__ == "__main__":
     would mean a low F1 score. So the higher the F1 score, the more confident the user can be that the model correctly predicted the values irrespective of the proportion
     of such values in the data set 
     '''
-    # Get label names
-    label_names = test_text.unique()
-    print(f"{"="*15} Random Forest Performance {"="*15}")
-    print(classification_report(y_test, random_forest_y_predict, target_names = label_names))
