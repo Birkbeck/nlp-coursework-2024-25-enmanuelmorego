@@ -10,6 +10,7 @@ pandas = "*"
 nltk = "*"
 spacy = "*"
 contractions = "==0.1.73"
+scikit-learn = "*"
 
 [dev-packages]
 pytest = "*"
