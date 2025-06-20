@@ -11,9 +11,10 @@ nltk = "*"
 spacy = "*"
 contractions = "==0.1.73"
 scikit-learn = "*"
+matplotlib = "*"
 
 [dev-packages]
 pytest = "*"
 
 [requires]
-pytho
+python_version = "3.12"

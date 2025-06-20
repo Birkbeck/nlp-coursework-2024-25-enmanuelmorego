@@ -4,6 +4,9 @@ import pandas as pd
 import os
 from sklearn.model_selection import StratifiedShuffleSplit
 from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+
 
 
 def read_speeches_csv(path=Path.cwd() / "texts" / "p2-texts"):
@@ -91,3 +94,31 @@ if __name__ == "__main__":
     df_cleaned = speeches_clean(df)
     print(f"Dimensions of cleaned speeches data frame")
     print(df_cleaned.shape)
+
+    print("\n\t\t==== Section C ====\n")
+
+    # Prepare data for ML
+    x_train, x_test, y_train, y_test, train_text, test_text = data_pre_processing(df_cleaned)
+
+    # Train random forest
+    random_forest = RandomForestClassifier(n_estimators=300, n_jobs = -1)
+    random_forest.fit(x_train, y_train)
+    random_forest_y_predict = random_forest.predict(x_test)
+
+    '''
+    F1 Score: 2 / ((1 / precision) + (1 / recall)) is a combination of the precision and recall metrics
+        Precision: TP / (TP + FP) the proportion of all of the items predicted as positive that were actually positive 
+        Recall: TP/(TP + FN) the proportion of all of the actual positive values that the model correctly identified as positive (it accounts for false negatives)
+
+    F1 scores are particularly useful with imbalanced data as it takes into account the type of mistakes the model makes. This means that for the model to get a good 
+    F1 score (close to 1) it has to achieve both high precision and recall. 
+    
+    For example, if the model labels objects as'yes' most of the time, and the dataset has mostly
+    'yes' entries, the model might achieve high precision but low recall (as it missed the few no cases). The F1 scores takes this into account and this gap between the metrics
+    would mean a low F1 score. So the higher the F1 score, the more confident the user can be that the model correctly predicted the values irrespective of the proportion
+    of such values in the data set 
+    '''
+    # Get label names
+    label_names = test_text.unique()
+    print(f"{"="*15} Random Forest Performance {"="*15}")
+    print(classification_report(y_test, random_forest_y_predict, target_names = label_names))
