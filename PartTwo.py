@@ -38,6 +38,12 @@ def speeches_clean(df):
             Find the frequency count for each party, and keep the top 4 only
         - Column 'speech_class': removes all rows where value is NOT 'Speech'
         - Column 'speech': removes any entries where the length of the speech is less than 1000 characters
+
+    Args: 
+        df: Pandas data frame
+
+    Returns:
+        A Pandas data frame, cleaned
     '''
     # (a).i Clean Labour (Co-op) values
     df_cleaned = df.replace('Labour (Co-op)', 'Labour')
@@ -58,12 +64,106 @@ def speeches_clean(df):
 
     return df_cleaned2
 
-def data_pre_processing(df):
+def ml_pipeline(**kwargs):
+    '''
+    Function which processes and build ML models given the speeches data and prepares the data to be fed into ML models:
+    The pipeline:
+        Splits into train, test sets
+        Vectorises the data
+        Trains a RandomForest Model
+        Trains a Linear SVM classifer
+        Extracts the CLassification Report for each model
+        Macro-Average F1 Score
+    
+    Arguments can be passed as key value pairs. Some arguments are mandatory whilst other are optionals. When optional arguments are not provided
+    the function will use defaul values
+    Ars:
+        data (mandatory): A cleaned pandas data frame
+        ngram (optional): a tuple containing the ngram to consider to pass in the TfidVectorizer function
+            default value: (1,1) unigrams
+        stop_words (optional): A string containing the value for the stop_words argument for TfidVectorizer. If set ti 'english', stop words would be removed
+            default value: None - Stop words would not be removed
+
+    '''
+    # Extract input parameters
+    input_dict = kwargs
+
+    # Extract data from input
+    df = input_dict.get('data')
+    # Extract ngram range, if not provided, default to (1,1)
+    ngram = input_dict.get('ngram', (1,1))
+    # Extract stop words argument
+    stop_words = input_dict.get('stop_words', None)
+
+    # (b) Generate object that splits data using stratified sampling, and random seed of 26
+    splitter_obj = StratifiedShuffleSplit(n_splits = 1, test_size = 0.2, random_state = 26) 
+    # Split data
+    for train_index, test_index in splitter_obj.split(df, df['party']):
+        train = df.iloc[train_index]
+        test = df.iloc[test_index]
+
+    # (b) Split target in both training and testing set
+    y_train, y_test = train['party'], test['party']
+
+    # (b) Create vectorised data for x objects
+    '''
+    Max features set to 3000
+    stop_words, ngram = defined by parameters when function is called
+    '''
+    vectorizer = TfidfVectorizer(max_features = 3000, stop_words=stop_words, ngram_range = ngram)
+    x_train = vectorizer.fit_transform(train['speech'])
+    x_test = vectorizer.transform(test['speech'])
+
+    # (c) Train random forest
+    random_forest = RandomForestClassifier(n_estimators=300, n_jobs = -1)
+    random_forest.fit(x_train, y_train)
+    random_forest_y_predict = random_forest.predict(x_test)
+
+    # (c) Train SVM
+    svm = LinearSVC()
+    svm.fit(x_train, y_train)
+    svm_y_predict = svm.predict(x_test)
+
+    # Get label names
+    target_names = y_test.unique()
+
+    # Results section 
+    print(f"{"="*20} Random Forest Performance {"="*20}")
+    rf_cr = classification_report(y_test, random_forest_y_predict, target_names = target_names, output_dict = True)
+    print(classification_report(y_test, random_forest_y_predict, target_names = target_names))
+
+    print(f"{"="*20} SVC Performance {"="*20}")
+    svc_cr = classification_report(y_test, svm_y_predict, target_names = target_names, output_dict = True)
+    print(classification_report(y_test, svm_y_predict, target_names = target_names))
+
+    return {'rf': rf_cr, 'svc': svc_cr}
+
+def data_pre_processing(input_dict=None, **kwargs):
     '''
     Function to pre process the data in preparation for ML models.
         Splits into train, test sets
         Vectorises the data
+        Returns 6 processed objects
+
+    For flexibility, the input of the function is defined as a dicionary or key value pairs. This allows user to add multiple parameters, or if no parameters are given
+    the function can simply use pre-set default values
+    
+    Args:
+        data (mandatory) = a pandas data frame to process
+        ngram (optional) = a tuple containing the ngram to consider to pass in the TfidVectorizer function
+    
     '''
+    # Check whether input is a dicitonary or key-value pairs
+    if input_dict is None:
+        input_dict = kwargs
+
+    # Extract data from input
+    df = input_dict.get('data')
+    # Extract ngram range, if not provided, default to (1,1)
+    ngram = input_dict.get('ngram', (1,1))
+    # Extract stop words argument
+    stop_words = input_dict.get('stop_words', None)
+
     # Generate object that splits data
     splitter_obj = StratifiedShuffleSplit(n_splits = 1, test_size = 0.2, random_state = 26) 
     # Split data
@@ -76,7 +176,7 @@ def data_pre_processing(df):
 
     # Create vectorised data for x objects
     '''Prompt indicated to use all default parameters, except for ommitting English stop words and max_featrues which needs to be set to 3000'''
-    vectorizer = TfidfVectorizer(max_features = 3000, stop_words='english')
+    vectorizer = TfidfVectorizer(max_features = 3000, stop_words=stop_words, ngram_range = ngram)
     x_train = vectorizer.fit_transform(train['speech'])
     x_test = vectorizer.transform(test['speech'])
 
@@ -84,12 +184,35 @@ def data_pre_processing(df):
     return x_train, x_test, y_train, y_test, train['speech'], test['speech']
 
 
-def ml_models(df):
+def ml_models(input_dict=None, **kwargs):
     '''
     Pipeline to train and run ML models
+    
+    The function also calls the pre_processing function which prepares the data
+
+    For flexibility, the input of the function is defined as a dicionary or key value pairs. This allows user to add multiple parameters, or if no parameters are given
+    the function can simply use pre-set default values.
+
+    This is useful as it will allow the user to adjust hyperparameters as needed.
+    
+    Args:
+        data (mandatory) = a pandas data frame to process
+        ngram (optional) = a tuple containing the ngram to consider to pass in the TfidVectorizer function (this is passed into the data_pre_processing function)
+
     '''    
+     # Check whether input is a dicitonary or key-value pairs
+    if input_dict is None:
+        input_dict = kwargs
+
+    # Extract data from input
+    df = input_dict.get('data')
+    # Extract ngram range, if not provided, default to (1,1)
+    ngram = input_dict.get('ngram', (1,1))
+    # Extract stop words argument
+    stop_words = input_dict.get('stop_words', None)
+
     # Prepare data for ML
-    x_train, x_test, y_train, y_test, train_text, test_text = data_pre_processing(df)
+    x_train, x_test, y_train, y_test, train_text, test_text = data_pre_processing(data = df, ngram= ngram, stop_words=stop_words)
 
     # Train random forest
     random_forest = RandomForestClassifier(n_estimators=300, n_jobs = -1)
@@ -106,16 +229,22 @@ def ml_models(df):
 
     # Results section 
     print(f"{"="*20} Random Forest Performance {"="*20}")
+    rf_cr = classification_report(y_test, random_forest_y_predict, target_names = target_names, output_dict = True)
     print(classification_report(y_test, random_forest_y_predict, target_names = target_names))
 
     print(f"{"="*20} SVC Performance {"="*20}")
+    svc_cr = classification_report(y_test, svm_y_predict, target_names = target_names, output_dict = True)
     print(classification_report(y_test, svm_y_predict, target_names = target_names))
+
+    return {'rf': rf_cr, 'svc': svc_cr}
+
+    # def my_tokenizer_simple()
    
 
 if __name__ == "__main__":
     
     '''Section A'''
-    print("\n\t\t==== Section A ====\n")
+    print("\n\n\t\t==== Section A ====\n")
     print(f"Data load and initial cleaning...")
     
     # Load speeches data frame
@@ -126,13 +255,36 @@ if __name__ == "__main__":
     print(df_cleaned.shape)
 
     '''Section B'''
-    print("\n\t\t==== Section B ====\n")
+    print("\n\n\t\t==== Section B ====\n")
     print(f"Data preprocessing for ML models - see function data_pre_processing...")
 
-    print("\n\t\t==== Section C ====\n")
-    print(f"Trains and compare performance of Random Forest vs SVM with a linear kernel...")
-    ml_models(df_cleaned)
+    print("\n\n\t\t==== Section C ====\n")
+    print(f"Trains and compare performance of Random Forest vs SVM with a linear kernel...\n")
 
+    f1_results = {}
+
+    print(f"\nModel 1:\n\tTfidvectorizer unigrams only")
+    section_c = ml_models(data = df_cleaned, stop_words = 'english')
+    # Save results into a dictionary
+    f1_results['f1_ma_rf_unigram'] =  round(section_c['rf']['macro avg']['f1-score'] ,2)
+    f1_results['f1_ma_svc_unigram'] = round(section_c['svc']['macro avg']['f1-score'], 2)
+
+    print("\n\n\t\t==== Section D ====\n")
+
+    print(f"\nModel 2:\n\tTfidvectorizer unigrams, bi-grams and tri-grams")
+    section_d = ml_models(data = df_cleaned, ngram = (1,3), stop_words = 'english')
+    # Save results into a dictionary
+    f1_results['f1_ma_rf_uni_bi_trigrams'] =  round(section_d['rf']['macro avg']['f1-score'] ,2)
+    f1_results['f1_ma_svc_uni_bi_trigrams'] = round(section_d['svc']['macro avg']['f1-score'], 2)
+
+    print("\n\n\t\t==== Section E ====\n")
+    print(f"Try a few custom tokenizers and compare performance")
+
+    print(f"\nModel 1:\n\tBasic word tokenizer, keep english stop words")
+
+    print(".............")
+    print(f1_results)
+    
 
     '''
     F1 Score: 2 / ((1 / precision) + (1 / recall)) is a combination of the precision and recall metrics
