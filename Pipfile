@@ -13,6 +13,7 @@ contractions = "==0.1.73"
 scikit-learn = "*"
 matplotlib = "*"
 transformers = "*"
+gensim = "*"
 
 [dev-packages]
 pytest = "*"

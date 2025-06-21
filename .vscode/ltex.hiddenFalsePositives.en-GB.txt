@@ -1,0 +1,1 @@
+{"rule":"MORFOLOGIK_RULE_EN_GB","sentence":"^\\QThere could be instances where the text is: \"we're\" and \"we are\", despite these two objects being the same, the vectorizer would encode these as two separate items.\\E$"}
