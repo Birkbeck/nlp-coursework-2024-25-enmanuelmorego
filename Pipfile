@@ -18,4 +18,4 @@ transformers = "*"
 pytest = "*"
 
 [requires]
-pytho
+python_version = "3.12"
