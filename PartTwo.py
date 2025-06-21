@@ -7,7 +7,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import classification_report
 from sklearn.svm import LinearSVC
-
+from nltk import word_tokenize
+import re
+from transformers import BertTokenizerFast
 
 
 def read_speeches_csv(path=Path.cwd() / "texts" / "p2-texts"):
@@ -90,10 +92,17 @@ def ml_pipeline(**kwargs):
 
     # Extract data from input
     df = input_dict.get('data')
-    # Extract ngram range, if not provided, default to (1,1)
     ngram = input_dict.get('ngram', (1,1))
-    # Extract stop words argument
     stop_words = input_dict.get('stop_words', None)
+    tokenizer = input_dict.get('tokenizer', None)
+
+    # Tokenizer print: 
+    if tokenizer is not None:
+        token_print = tokenizer.__name__
+    else:
+        token_print = tokenizer
+    print("\nArguments:")
+    print(f"\tNgram: {ngram}\n\tStop words: {stop_words}\n\tTokenizer: {token_print}\n")
 
     # (b) Generate object that splits data using stratified sampling, and random seed of 26
     splitter_obj = StratifiedShuffleSplit(n_splits = 1, test_size = 0.2, random_state = 26) 
@@ -110,12 +119,15 @@ def ml_pipeline(**kwargs):
     Max features set to 3000
     stop_words, ngram = defined by parameters when function is called
     '''
-    vectorizer = TfidfVectorizer(max_features = 3000, stop_words=stop_words, ngram_range = ngram)
+    vectorizer = TfidfVectorizer(max_features = 3000, 
+                                 stop_words=stop_words, 
+                                 ngram_range = ngram,
+                                 tokenizer = tokenizer)
     x_train = vectorizer.fit_transform(train['speech'])
     x_test = vectorizer.transform(test['speech'])
 
     # (c) Train random forest
-    random_forest = RandomForestClassifier(n_estimators=300, n_jobs = -1)
+    random_forest = RandomForestClassifier(n_estimators=10, n_jobs = -1) # TODO Set to small number for training, bring back to 300 for real testing
     random_forest.fit(x_train, y_train)
     random_forest_y_predict = random_forest.predict(x_test)
 
@@ -137,6 +149,26 @@ def ml_pipeline(**kwargs):
     print(classification_report(y_test, svm_y_predict, target_names = target_names))
 
     return {'rf': rf_cr, 'svc': svc_cr}
+
+def my_tokenizer_basic(text):
+    '''
+    Basic tokenizer that keeps stop words in
+    '''
+    tokens = word_tokenize(text.lower())
+    return [token for token in tokens if token.isalpha()]
+
+# Building/load tokenizer 
+bert_tokenizer = BertTokenizerFast.from_pretrained("bert-base-uncased")
+def my_tokenizer_bert(text, tokenizer):
+    '''
+    Tokenizer using BERT fast tokenizer mode
+    '''
+    # Clean the text. Remove special characters, such as \n, \t etc and extra white spaces
+    text = re.sub(r'\s+', ' ', text)
+    text = text.strip()
+    tokenized_text = tokenizer.tokenize(text)
+    return tokenized_text
+
 
 def data_pre_processing(input_dict=None, **kwargs):
     '''
@@ -261,10 +293,11 @@ if __name__ == "__main__":
     print("\n\n\t\t==== Section C ====\n")
     print(f"Trains and compare performance of Random Forest vs SVM with a linear kernel...\n")
 
+    # Dictionary to record the Macro Avg F1 score for each tested model
     f1_results = {}
 
     print(f"\nModel 1:\n\tTfidvectorizer unigrams only")
-    section_c = ml_models(data = df_cleaned, stop_words = 'english')
+    section_c = ml_pipeline(data = df_cleaned, stop_words = 'english')
     # Save results into a dictionary
     f1_results['f1_ma_rf_unigram'] =  round(section_c['rf']['macro avg']['f1-score'] ,2)
     f1_results['f1_ma_svc_unigram'] = round(section_c['svc']['macro avg']['f1-score'], 2)
@@ -272,7 +305,7 @@ if __name__ == "__main__":
     print("\n\n\t\t==== Section D ====\n")
 
     print(f"\nModel 2:\n\tTfidvectorizer unigrams, bi-grams and tri-grams")
-    section_d = ml_models(data = df_cleaned, ngram = (1,3), stop_words = 'english')
+    section_d = ml_pipeline(data = df_cleaned, ngram = (1,3), stop_words = 'english')
     # Save results into a dictionary
     f1_results['f1_ma_rf_uni_bi_trigrams'] =  round(section_d['rf']['macro avg']['f1-score'] ,2)
     f1_results['f1_ma_svc_uni_bi_trigrams'] = round(section_d['svc']['macro avg']['f1-score'], 2)
@@ -281,9 +314,22 @@ if __name__ == "__main__":
     print(f"Try a few custom tokenizers and compare performance")
 
     print(f"\nModel 1:\n\tBasic word tokenizer, keep english stop words")
+    section_e_basic_t =  ml_pipeline(data = df_cleaned, ngram = (1,3), stop_words = 'english', tokenizer = my_tokenizer_basic)
+    f1_results['f1_ma_rf_uni_bi_trigrams_basictoken'] =  round(section_e_basic_t['rf']['macro avg']['f1-score'] ,2)
+    f1_results['f1_ma_svc_uni_bi_trigrams_basictoken'] = round(section_e_basic_t['svc']['macro avg']['f1-score'], 2)
+
+    print(f"\nModel 2:\nBERT word tokenizer, keep english stop words")
+    
+    # Create tokenizer
+    section_e_bert_t =  ml_pipeline(data = df_cleaned, ngram = (1,3), stop_words = 'english', tokenizer = my_tokenizer_bert)
+    f1_results['f1_ma_rf_uni_bi_trigrams_berttoken'] =  round(section_e_bert_t['rf']['macro avg']['f1-score'] ,2)
+    f1_results['f1_ma_svc_uni_bi_trigrams_berttoken'] = round(section_e_bert_t['svc']['macro avg']['f1-score'], 2)
+
 
     print(".............")
     print(f1_results)
+
+
     
 
     '''

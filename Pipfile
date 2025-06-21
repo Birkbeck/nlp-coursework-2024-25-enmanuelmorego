@@ -12,6 +12,7 @@ spacy = "*"
 contractions = "==0.1.73"
 scikit-learn = "*"
 matplotlib = "*"
+transformers = "*"
 
 [dev-packages]
 pytest = "*"
