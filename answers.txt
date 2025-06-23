@@ -1,5 +1,18 @@
 Answers to the text questions go here.
 
+Part 1
+Question D
+
+The Felsch Kincaid Grade level score does not take into account domain-specific terminology. For example, a text could have a good FK-score but the words, whilst short, 
+can be very specific to a given domain, making it difficult to read for readers not familiar with such content. For example, words like 'dyspnea' or 'heloma' are not longer than 
+other common words like 'breakfast' or 'computer', but sentences with words 'breakfast' and 'computer' might be easier to read than 'dyspnea' or 'heloma' 
+given that 'computer' / 'breakfast' are more commonly used in everyday language. Therefore, FK Grade level does not directly take into account vocabulary difficulty.
+
+Another case where the FK-Grade level would not be suitable is for very short or long texts. The main information that this metric uses is counts of words, sentences and syllables. If a 
+text is too short, there won't be enough data for the formula to accurately represent the reading difficulty level of the text. On the other hand, if a document is too
+long, it might be more appropriate to find the natural split of the corpus (is it organised by chapters, themes, sections), as these subcomponents of the document might
+have their difficulty reading level. Thus, separating it into smaller subtexts might provide a more accurate representation of the reading difficulty. 
+
 Part 2
 Question E
 
