@@ -363,7 +363,7 @@ def tokens_clean(text):
 
 def count_syl_vowel_cluster(word):
     '''
-    Function to count syllables based on vowels clusters
+    Function to count syllables based on vowels clusters. Included 'y' as vowels as many english words contain only 'y' i.e., 'why', 'by', 'cry', etc
 
     Args:
         word: a string representing a single word
@@ -372,7 +372,7 @@ def count_syl_vowel_cluster(word):
         int: total number of syllables per word
     '''
     # Define vowels
-    v = ['a','e','i','o','u']
+    v = ['a','e','i','o','u', 'y']
     cons_vowel = 0
     syl_count = 0
     word = word.lower()
