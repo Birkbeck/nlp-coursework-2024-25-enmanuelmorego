@@ -44,4 +44,4 @@ At the end, the text is transformed into a cleaned list of lower case tokens.
 This tokenizer performed better in comparison to None and the other custom tokenizers. Using a pre trained model like SpaCy allows for the nunances of the English language
 to be captured when splitting words into tokens. In addition, the contraction expansion also helped to make the content of the bag of words more consisent and uniform. The hyperparameter 
 class_weight was also set to 'balanced' to account for the imbalances in the data set. Despite this tokenizer being slightly more computationally expensive, the boost in performance
-for the SVC model from approx 0.65~0.66 to 0.70 appears to be worthwhi
+for the SVC model from approx 0.65~0.66 to 0.70 appears to be worthwhile. 
