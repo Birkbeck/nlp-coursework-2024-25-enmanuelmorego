@@ -313,10 +313,16 @@ def subjects_by_verb_count(doc, verb):
     if len(sorted_dict) > 10:
         sorted_dict = sorted_dict[:10]
 
-    #return out_dict
-    return [{vs_pair: count} for vs_pair, count in sorted_dict]
+    '''Uncomment the code below to return a list of dictionaries containg the {(verb, sub): count...}'''
+    #return [{vs_pair: count} for vs_pair, count in sorted_dict]
+    '''Uncoment the code below to return a list of the most common subjects [word1, word2....]'''
+    return [pair[0][1] for pair in sorted_dict]
+    
 
 def adjective_counts(doc):
+    ######                                                                                   ######
+    ###### Please note, adjective counts were removed from the requirements of the assigment ###### 
+    ######                                                                                   ######
     """Extracts the most common adjectives in a parsed document. Returns a list of tuples."""
 
     # initiliase dictionary for frequency count
@@ -448,6 +454,7 @@ if __name__ == "__main__":
     print(get_ttrs(df))
     print(get_fks(df))
     df = pd.read_pickle(Path.cwd() / "pickles" /"parsed.pickle")
+    # Please note, adjective counts were removed from the requirements of the assigment
     print(adjective_counts(df))
     
     print("\n*** Top 10 Syntatic objects overall in the text - Organised by count ***\n")

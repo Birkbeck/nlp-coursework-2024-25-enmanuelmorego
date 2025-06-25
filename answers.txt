@@ -11,7 +11,7 @@ given that 'computer' / 'breakfast' are more commonly used in everyday language.
 Another case where the FK-Grade level would not be suitable is for very short or long texts. The main information that this metric uses is counts of words, sentences and syllables. If a 
 text is too short, there won't be enough data for the formula to accurately represent the reading difficulty level of the text. On the other hand, if a document is too
 long, it might be more appropriate to find the natural split of the corpus (is it organised by chapters, themes, sections), as these subcomponents of the document might
-have their difficulty reading level. Thus, separating it into smaller subtexts might provide a more accurate representation of the reading difficulty. 
+have their own difficulty reading level. Thus, separating it into smaller subtexts might provide a more accurate representation of the reading difficulty. 
 
 Part 2
 Question E
